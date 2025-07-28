@@ -11,10 +11,9 @@
       crossorigin="anonymous"
     ></script>
     <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
-
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
   <body>
     <!-- Preloader -->
@@ -34,37 +33,44 @@
       </div>
     </header>
 
-<div class="hero entrance">
-  <div class="hero-content">
-    <div class="hero-text">
-      <h1>Hi, I'm Ridha<br /><span>Full Stack Developer</span></h1>
-      <p>Crafting elegant, interactive, and powerful digital experiences.</p>
-      <a href="#projects" class="btn">View My Work</a>
-    </div>
-    
-    <div class="hero-image-social">
-      <div class="hero-image">
-        <img src="assets/Ridha.jpg" alt="Your Photo" />
-      </div>
-      <div class="social-icons-hero">
-        <a href="https://www.instagram.com/ridhaak1/" target="_blank">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://wa.me/+32467792949" target="_blank">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+    <div class="hero entrance">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Hi, I'm Ridha<br /><span>Full Stack Developer</span></h1>
+          <p>
+            Crafting elegant, interactive, and powerful digital experiences.
+          </p>
+          <a href="#projects" class="btn">View My Work</a>
+        </div>
 
+        <div class="hero-image-social">
+          <div class="hero-image">
+            <img src="assets/Ridha.jpg" alt="Your Photo" />
+          </div>
+          <div class="social-icons-hero">
+            <a href="https://www.instagram.com/ridhaak1/" target="_blank">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/+32467792949" target="_blank">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- About -->
     <section id="about" class="section fade-in">
       <h2>About Me</h2>
       <p>
-        Passionate developer with a focus on modern design, animation, and
-        high-performance applications.
+        Hi, I’m Ridha Al Khaykanee
+	•	a 20-year-old developer
+	•	student at AP University of Applied Sciences and Arts in Antwerp.
+
+I’m currently studying web and mobile application development, while also expanding my skills in game development through a Unity course on Udemy, where I’m building five diverse 3D games.
+
+I’m passionate about programming in all its forms — from clean code to creative experiences. I constantly explore new technologies, stay curious, and strive to bring out my best in every project.
+For me, code isn’t just a skill — it’s how I express myself.
       </p>
     </section>
 
@@ -81,39 +87,62 @@
       </div>
     </section>
 
-    <!-- Projects -->
-      <section id="projects" class="section fade-in">
-    <h2>Projects</h2>
-    <div class="projects-grid">
-      <div class="project-card">
-        <img src="" alt="Project 1" />
-        <h3>متجر إلكتروني</h3>
-        <p>موقع بيع منتجات بتقنيات React + Firebase</p>
-        <div class="project-links">
-          <a href="https://example.com" target="_blank">معاينة مباشرة</a>
-          <a href="https://github.com/username/project1" target="_blank">GitHub</a>
-        </div>
-      </div>
-      <div class="project-card">
-        <img src="project2.jpg" alt="Project 2" />
-        <h3>نظام مواعيد</h3>
-        <p>نظام حجز مواعيد كامل باستخدام MERN Stack</p>
-        <div class="project-links">
-          <a href="https://example2.com" target="_blank">معاينة مباشرة</a>
-          <a href="https://github.com/username/project2" target="_blank">GitHub</a>
-        </div>
-      </div>
-      <div class="project-card">
-        <img src="project3.jpg" alt="Project 3" />
-        <h3>لعبة 3D</h3>
-        <p>لعبة هروب مطاردة بوليسية باستخدام Unity</p>
-        <div class="project-links">
-          <a href="#" target="_blank">معاينة مباشرة</a>
-          <a href="https://github.com/username/project3" target="_blank">GitHub</a>
-        </div>
+<!-- Projects -->
+<section id="projects" class="section fade-in">
+  <h2>Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <img src="" alt="Project 1" />
+      <h3>E-commerce Store</h3>
+      <p>Product selling website using React + Firebase</p>
+      <div class="project-links">
+        <a href="https://example.com" target="_blank">Live Demo</a>
+        <a href="https://github.com/username/project1" target="_blank">GitHub</a>
       </div>
     </div>
-  </section>
+
+    <div class="project-card">
+      <img src="project2.jpg" alt="Project 2" />
+      <h3>Appointment System</h3>
+      <p>Full booking system built with MERN Stack</p>
+      <div class="project-links">
+        <a href="https://example2.com" target="_blank">Live Demo</a>
+        <a href="https://github.com/username/project2" target="_blank">GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="assets/Game1.png" alt="Project 3" />
+      <h3>3D Game</h3>
+      <p>Police chase escape game made with Unity</p>
+
+      <button
+        onclick="document.getElementById('unityGame').style.display = 'block'"
+        style="margin-top: 10px"
+      >
+        ▶️ Play Game
+      </button>
+
+      <div id="unityGame" style="display: none; margin-top: 10px">
+        <iframe
+          src="WebGame-Obstacle/index.html"
+          width="100%"
+          height="300"
+          frameborder="0"
+          allowfullscreen
+          style="border: 2px solid #ccc; border-radius: 10px"
+        >
+        </iframe>
+      </div>
+
+      <div class="project-links">
+        <a href="WebGame-Obstacle/index.html" target="_blank">Open Fullscreen</a>
+        <a href="https://github.com/username/project3" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Contact -->
     <section id="contact" class="section fade-in">

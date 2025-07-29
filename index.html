@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ridha- IT</title>
+    <title>Ridha - IT</title>
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js" defer></script>
     <script
@@ -16,12 +16,8 @@
     />
   </head>
   <body>
-    <!-- Preloader -->
-    <div id="preloader">
-      <div class="spinner"></div>
-    </div>
+    <div id="preloader"><div class="spinner"></div></div>
 
-    <!-- Header -->
     <header class="custom-header">
       <div class="container">
         <ul class="nav-links">
@@ -35,14 +31,6 @@
 
     <div class="hero entrance">
       <div class="hero-content">
-        <div class="hero-text">
-          <h1>Hi, I'm Ridha<br /><span>Full Stack Developer</span></h1>
-          <p>
-            Crafting elegant, interactive, and powerful digital experiences.
-          </p>
-          <a href="#projects" class="btn">View My Work</a>
-        </div>
-
         <div class="hero-image-social">
           <div class="hero-image">
             <img src="assets/Ridha.jpg" alt="Your Photo" />
@@ -56,95 +44,110 @@
             </a>
           </div>
         </div>
+        <div class="hero-text">
+          <h1>
+            Hi, I’m Ridha<br />
+            • Web Developer<br />
+            • Mobile App Developer<br />
+            • 3D Game Creator
+          </h1>
+          <p>→ Let’s turn ideas into reality</p>
+          <a href="#projects" class="btn">View My Work</a>
+        </div>
       </div>
     </div>
 
-    <!-- About -->
     <section id="about" class="section fade-in">
       <h2>About Me</h2>
       <p>
-        Hi, I’m Ridha Al Khaykanee
-	•	a 20-year-old developer
-	•	student at AP University of Applied Sciences and Arts in Antwerp.
-
-I’m currently studying web and mobile application development, while also expanding my skills in game development through a Unity course on Udemy, where I’m building five diverse 3D games.
-
-I’m passionate about programming in all its forms — from clean code to creative experiences. I constantly explore new technologies, stay curious, and strive to bring out my best in every project.
-For me, code isn’t just a skill — it’s how I express myself.
+        Hi, I’m Ridha Al Khaykanee<br />
+        • a 20-year-old developer<br />
+        • student at AP University of Applied Sciences and Arts in Antwerp.
+      </p>
+      <p>
+        I’m currently studying web and mobile application development, while
+        also expanding my skills in game development through a Unity course on
+        Udemy, where I’m building five diverse 3D games.
+      </p>
+      <p>
+        I’m passionate about programming in all its forms — from clean code to
+        creative experiences. I constantly explore new technologies, stay
+        curious, and strive to bring out my best in every project. For me, code
+        isn’t just a skill — it’s how I express myself.
       </p>
     </section>
 
-    <!-- Skills -->
     <section id="skills" class="section fade-in">
       <h2>Skills</h2>
       <div class="skills-grid">
-        <div class="skill-card">HTML5</div>
-        <div class="skill-card">CSS3</div>
+        <div class="skill-card">HTML & CSS</div>
         <div class="skill-card">JavaScript</div>
         <div class="skill-card">React</div>
+        <div class="skill-card">React Native</div>
         <div class="skill-card">Node.js</div>
-        <div class="skill-card">MongoDB</div>
+        <div class="skill-card">Unity Game Development</div>
       </div>
     </section>
 
-<!-- Projects -->
-<section id="projects" class="section fade-in">
-  <h2>Projects</h2>
-  <div class="projects-grid">
-    <div class="project-card">
-      <img src="" alt="Project 1" />
-      <h3>E-commerce Store</h3>
-      <p>Product selling website using React + Firebase</p>
-      <div class="project-links">
-        <a href="https://example.com" target="_blank">Live Demo</a>
-        <a href="https://github.com/username/project1" target="_blank">GitHub</a>
+    <section id="projects" class="section fade-in">
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <img src="assets/projectnoorosophia.png" alt="Noorosophia" />
+          <h3>WebShop Noorosophia</h3>
+          <p>
+          I developed an online store as a project for the Web Technologies
+          course during my university studies. This website was carefully designed
+          using HTML, CSS, and JavaScript to provide a seamless and engaging user experience.
+          </p>
+          <div class="project-links">
+            <a href="https://ridhaak1.neocities.org/My%20site/" target="_blank"
+              >Visit Shop</a
+            >
+            <a href="https://github.com/username/project3" target="_blank"
+              >GitHub</a
+            >
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="assets/Game1.png" alt="Obstacle Dodge" />
+          <h3>Obstacle Dodge</h3>
+          <p>
+            A game focused on variables, movement, and collisions. This is my
+            first game — not the best, but it was the key to starting my
+            learning journey.
+          </p>
+
+          <button
+            onclick="document.getElementById('unityGame').style.display = 'block'"
+            style="margin-top: 10px"
+          >
+            ▶️ Play Game
+          </button>
+
+          <div id="unityGame" style="display: none; margin-top: 10px">
+            <iframe
+              src="WebGame-Obstacle/index.html"
+              width="100%"
+              height="300"
+              frameborder="0"
+              allowfullscreen
+              style="border: 2px solid #ccc; border-radius: 10px"
+            ></iframe>
+          </div>
+
+          <div class="project-links">
+            <a href="WebGame-Obstacle/index.html" target="_blank"
+              >Open Fullscreen</a
+            >
+            <a href="https://github.com/username/project3" target="_blank"
+              >GitHub</a
+            >
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="project-card">
-      <img src="project2.jpg" alt="Project 2" />
-      <h3>Appointment System</h3>
-      <p>Full booking system built with MERN Stack</p>
-      <div class="project-links">
-        <a href="https://example2.com" target="_blank">Live Demo</a>
-        <a href="https://github.com/username/project2" target="_blank">GitHub</a>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <img src="assets/Game1.png" alt="Project 3" />
-      <h3>3D Game</h3>
-      <p>Police chase escape game made with Unity</p>
-
-      <button
-        onclick="document.getElementById('unityGame').style.display = 'block'"
-        style="margin-top: 10px"
-      >
-        ▶️ Play Game
-      </button>
-
-      <div id="unityGame" style="display: none; margin-top: 10px">
-        <iframe
-          src="WebGame-Obstacle/index.html"
-          width="100%"
-          height="300"
-          frameborder="0"
-          allowfullscreen
-          style="border: 2px solid #ccc; border-radius: 10px"
-        >
-        </iframe>
-      </div>
-
-      <div class="project-links">
-        <a href="WebGame-Obstacle/index.html" target="_blank">Open Fullscreen</a>
-        <a href="https://github.com/username/project3" target="_blank">GitHub</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-    <!-- Contact -->
     <section id="contact" class="section fade-in">
       <h2>Contact Me</h2>
       <form>
@@ -155,7 +158,6 @@ For me, code isn’t just a skill — it’s how I express myself.
       </form>
     </section>
 
-    <!-- Footer -->
     <footer>
       <p>&copy; 2025 Ridha Al Khaykanee. All rights reserved.</p>
     </footer>

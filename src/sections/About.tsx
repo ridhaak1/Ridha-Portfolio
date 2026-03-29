@@ -66,15 +66,6 @@ const STRENGTHS = [
 const BEYOND = ["Philosophy", "Reading", "Football", "Gym"];
 
 // ─── Hook: animated section ───────────────────────────────────────────────────
-function Section({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <div ref={ref} data-inview={inView}>
-      {children}
-    </div>
-  );
-}
 
 function Reveal({
   children,

@@ -1,0 +1,87 @@
+.contact {
+  background: #07090d;
+  color: #f0ede8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  max-width: 900px;
+  padding: 120px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Headline */
+.headline {
+  font-size: clamp(40px, 6vw, 72px);
+  font-family: "Bebas Neue", sans-serif;
+  line-height: 1.1;
+  letter-spacing: 2px;
+}
+
+.headline span {
+  color: #f5a623;
+}
+
+/* Description */
+.desc {
+  font-size: 15px;
+  color: rgba(240, 237, 232, 0.6);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Primary */
+.primaryBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #f5a623;
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(245, 166, 35, 0.3);
+}
+
+/* Secondary */
+.secondaryBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  color: #f0ede8;
+  transition: 0.3s;
+}
+
+.secondaryBtn:hover {
+  border-color: #f5a623;
+  color: #f5a623;
+  transform: translateY(-3px);
+}
+
+/* Signature */
+.signature {
+  margin-top: 40px;
+  font-size: 12px;
+  opacity: 0.4;
+}

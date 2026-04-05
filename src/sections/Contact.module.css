@@ -1,87 +1,259 @@
+/* ── Section ─────────────────────────────────────────────── */
 .contact {
+  position: relative;
   background: #07090d;
   color: #f0ede8;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  padding: 80px 20px 48px;
 }
 
+/* Background glow blob */
+.bgGlow {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(245, 166, 35, 0.07) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Subtle dot grid */
+.bgGrid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px
+  );
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* ── Inner ───────────────────────────────────────────────── */
 .inner {
-  max-width: 900px;
-  padding: 120px 20px;
-  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
 }
 
-/* Headline */
+/* ── Badge ───────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid rgba(245, 166, 35, 0.25);
+  background: rgba(245, 166, 35, 0.06);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f5a623;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5a623;
+  box-shadow: 0 0 8px rgba(245, 166, 35, 0.8);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ── Headline ────────────────────────────────────────────── */
 .headline {
-  font-size: clamp(40px, 6vw, 72px);
+  font-size: clamp(42px, 7vw, 80px);
   font-family: "Bebas Neue", sans-serif;
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: 2px;
+  margin-top: 4px;
 }
 
 .headline span {
-  color: #f5a623;
+  background: linear-gradient(90deg, #f5a623, #ffcd6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Description */
+/* ── Description ─────────────────────────────────────────── */
 .desc {
-  font-size: 15px;
-  color: rgba(240, 237, 232, 0.6);
-  max-width: 500px;
-  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.75;
+  color: rgba(240, 237, 232, 0.55);
+  max-width: 520px;
 }
 
-/* Buttons */
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
+/* ── Contact Grid ────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-top: 12px;
 }
 
-/* Primary */
-.primaryBtn {
+@media (max-width: 860px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
-  padding: 12px 22px;
-  background: #f5a623;
-  color: black;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.primaryBtn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(245, 166, 35, 0.3);
-}
-
-/* Secondary */
-.secondaryBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 22px 20px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  text-align: left;
   text-decoration: none;
   color: #f0ede8;
-  transition: 0.3s;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  cursor: pointer;
 }
 
-.secondaryBtn:hover {
-  border-color: #f5a623;
+.card:hover {
+  background: rgba(245, 166, 35, 0.06);
+  border-color: rgba(245, 166, 35, 0.3);
+  transform: translateY(-4px);
+}
+
+.card:hover .iconWrap {
+  background: rgba(245, 166, 35, 0.15);
   color: #f5a623;
-  transform: translateY(-3px);
 }
 
-/* Signature */
-.signature {
-  margin-top: 40px;
+.card:hover .arrow {
+  opacity: 1;
+  color: #f5a623;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 18px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.arrow {
+  font-size: 16px;
+  opacity: 0.3;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.cardLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.4);
+}
+
+.cardValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f0ede8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardDesc {
   font-size: 12px;
-  opacity: 0.4;
+  color: rgba(240, 237, 232, 0.35);
+}
+
+/* ── Primary CTA ─────────────────────────────────────────── */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: #f5a623;
+  color: #07090d;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  margin-top: 8px;
+}
+
+.cta:hover {
+  background: #ffcd6b;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(245, 166, 35, 0.35);
+}
+
+.ctaArrow {
+  font-size: 15px;
+  transition: transform 0.3s;
+}
+
+.cta:hover .ctaArrow {
+  transform: translate(2px, -2px);
+}
+
+/* ── Signature ───────────────────────────────────────────── */
+.signature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgba(240, 237, 232, 0.3);
+}
+
+.sigBrand {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: rgba(240, 237, 232, 0.5);
+}
+
+.divider {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(240, 237, 232, 0.2);
 }

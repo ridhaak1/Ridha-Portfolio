@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, type Variants, type Transition } from "framer-motion";
 import styles from "./Hero.module.css";
-import profilePhoto from "../assets/images/ridha.jpeg";
+import profilePhoto from "../assets/images/ridhacafe.png";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface MousePos {

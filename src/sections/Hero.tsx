@@ -283,7 +283,7 @@ export default function Hero() {
             animate="visible"
           >
             <span className={`${styles.spec} ${styles.specHi}`}>
-              Software Engineer
+              Software Developer
             </span>
             <span className={styles.dotSep} aria-hidden="true" />
             <span className={styles.spec}>Full-Stack</span>

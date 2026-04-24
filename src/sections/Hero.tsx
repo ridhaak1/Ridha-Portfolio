@@ -445,22 +445,6 @@ export default function Hero() {
             ))}
           </div>
 
-          <motion.div
-            className={styles.rdiv}
-            variants={fadeUp(1.6)}
-            initial="hidden"
-            animate="visible"
-          />
-
-          <motion.div
-            className={styles.exp}
-            variants={fadeUp(1.7)}
-            initial="hidden"
-            animate="visible"
-          >
-            <div className={styles.expN}>3+</div>
-            <div className={styles.expS}>Years exp.</div>
-          </motion.div>
         </div>
       </div>
 

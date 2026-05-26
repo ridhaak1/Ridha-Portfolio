@@ -5,101 +5,32 @@ import {
   useScroll,
   useTransform,
   type Variants,
-  type Transition,
 } from "framer-motion";
 import styles from "./About.module.css";
+import { HOOK_WORDS, STRENGTHS, BEYOND } from "../data/about";
+import Reveal from "../components/ui/Reveal";
+import SectionLabel from "../components/ui/SectionLabel";
+import SectionTag from "../components/ui/SectionTag";
 
-// ─── Easing ───────────────────────────────────────────────────────────────────
 const SPRING: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const EASE_OUT: [number, number, number, number] = [0.4, 0, 0.2, 1];
-
-const ts = (delay = 0, dur = 0.6): Transition => ({
-  duration: dur,
-  ease: SPRING,
-  delay,
-});
-const tf = (delay = 0, dur = 0.5): Transition => ({
-  duration: dur,
-  ease: EASE_OUT,
-  delay,
+const ts = (delay = 0, dur = 0.6) => ({
+  duration: dur, ease: SPRING, delay,
 });
 
 const fUp = (d = 0): Variants => ({
   hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0, transition: ts(d) },
 });
-const fIn = (d = 0): Variants => ({
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: tf(d) },
-});
-const fX = (d = 0): Variants => ({
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: ts(d) },
-});
 const barV: Variants = {
   hidden: { scaleX: 0 },
-  visible: {
-    scaleX: 1,
-    transition: { duration: 0.7, ease: SPRING, delay: 0.1 },
-  },
+  visible: { scaleX: 1, transition: { duration: 0.7, ease: SPRING, delay: 0.1 } },
 };
 const charV: Variants = {
   hidden: { opacity: 0, y: 30, rotateX: -40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: { duration: 0.55, ease: SPRING },
-  },
+  visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.55, ease: SPRING } },
 };
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-const HOOK_WORDS = ["From", "Curiosity", "to", "Creation."];
-
-const STRENGTHS = [
-  { n: "01", label: "Full-Stack", detail: "Frontend · Backend · APIs" },
-  { n: "02", label: "Architecture", detail: "Scalable · Clean · Owned" },
-  { n: "03", label: "Product Mind", detail: "Systems, not just features" },
-  { n: "04", label: "Fast Delivery", detail: "No compromises on quality" },
-];
-
-const BEYOND = ["Philosophy", "Reading", "Football", "Gym"];
-
-// ─── Hook: animated section ───────────────────────────────────────────────────
-
-function Reveal({
-  children,
-  delay = 0,
-  variants,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  variants?: Variants;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <motion.div
-      ref={ref}
-      variants={variants ?? fUp(delay)}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ─── Animated word (used in hook) ─────────────────────────────────────────────
-function Word({
-  word,
-  i,
-  inView,
-}: {
-  word: string;
-  i: number;
-  inView: boolean;
-}) {
+function Word({ word, i, inView }: { word: string; i: number; inView: boolean }) {
   const isAccent = word === "Creation.";
   return (
     <span className={styles.wordOuter}>
@@ -116,44 +47,15 @@ function Word({
   );
 }
 
-// ─── Label ────────────────────────────────────────────────────────────────────
-function SectionLabel({
-  n,
-  text,
-  inView,
-  delay = 0,
-}: {
-  n: string;
-  text: string;
-  inView: boolean;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      className={styles.label}
-      variants={fX(delay)}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-    >
-      <span className={styles.labelN}>{n}</span>
-      <div className={styles.labelLine} />
-      <span className={styles.labelTxt}>{text}</span>
-    </motion.div>
-  );
-}
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Parallax on the big number
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
   const bigNumY = useTransform(scrollYProgress, [0, 1], ["0px", "-60px"]);
 
-  // Per-block inView refs
   const tagRef = useRef<HTMLDivElement>(null);
   const hookRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLDivElement>(null);
@@ -177,41 +79,14 @@ export default function About() {
       <div className={`${styles.corner} ${styles.tl}`} aria-hidden="true" />
       <div className={`${styles.corner} ${styles.br}`} aria-hidden="true" />
 
-      {/* Big decorative number — parallax */}
-      <motion.div
-        className={styles.bigNum}
-        style={{ y: bigNumY }}
-        aria-hidden="true"
-      >
+      <motion.div className={styles.bigNum} style={{ y: bigNumY }} aria-hidden="true">
         02
       </motion.div>
 
       <div className={styles.inner}>
         {/* ── Tag ── */}
-        <div ref={tagRef} className={styles.tag}>
-          <motion.span
-            className={styles.tagN}
-            variants={fIn(0)}
-            initial="hidden"
-            animate={tagInView ? "visible" : "hidden"}
-          >
-            § 02
-          </motion.span>
-          <motion.div
-            className={styles.tagBar}
-            variants={barV}
-            initial="hidden"
-            animate={tagInView ? "visible" : "hidden"}
-            style={{ originX: 0 }}
-          />
-          <motion.span
-            className={styles.tagWord}
-            variants={fIn(0.25)}
-            initial="hidden"
-            animate={tagInView ? "visible" : "hidden"}
-          >
-            About
-          </motion.span>
+        <div ref={tagRef}>
+          <SectionTag number="02" label="About" inView={tagInView} styles={styles} />
         </div>
 
         {/* ══ HOOK ══ */}
@@ -233,7 +108,7 @@ export default function About() {
         {/* ══ JOURNEY ══ */}
         <div ref={journeyRef} className={styles.journeyRow}>
           <div className={styles.journeyLeft}>
-            <SectionLabel n="01" text="Journey" inView={journeyInView} />
+            <SectionLabel n="01" text="Journey" inView={journeyInView} styles={styles} />
             <motion.p
               className={styles.bodyLg}
               variants={fUp(0.1)}
@@ -242,8 +117,7 @@ export default function About() {
             >
               Started coding{" "}
               <span className={styles.hi}>long before college.</span> HTML, CSS,
-              JavaScript — learned it all self-driven, out of pure obsession
-              with building things.
+              JavaScript — learned it all self-driven, out of pure obsession with building things.
             </motion.p>
           </div>
 
@@ -261,14 +135,11 @@ export default function About() {
           </motion.div>
         </div>
 
-        {/* ── Rule ── */}
-        <Reveal>
-          <div className={styles.rule} />
-        </Reveal>
+        <Reveal><div className={styles.rule} /></Reveal>
 
         {/* ══ PHILOSOPHY ══ */}
         <div ref={philoRef} className={styles.philoWrap}>
-          <SectionLabel n="02" text="Philosophy" inView={philoInView} />
+          <SectionLabel n="02" text="Philosophy" inView={philoInView} styles={styles} />
           <motion.blockquote
             className={styles.quote}
             variants={fUp(0.1)}
@@ -290,14 +161,11 @@ export default function About() {
           </motion.p>
         </div>
 
-        {/* ── Rule ── */}
-        <Reveal>
-          <div className={styles.rule} />
-        </Reveal>
+        <Reveal><div className={styles.rule} /></Reveal>
 
         {/* ══ STRENGTHS ══ */}
         <div ref={strRef} className={styles.strWrap}>
-          <SectionLabel n="03" text="Strengths" inView={strInView} />
+          <SectionLabel n="03" text="Strengths" inView={strInView} styles={styles} />
           <div className={styles.strGrid}>
             {STRENGTHS.map((s, i) => (
               <motion.div
@@ -316,14 +184,11 @@ export default function About() {
           </div>
         </div>
 
-        {/* ── Rule ── */}
-        <Reveal>
-          <div className={styles.rule} />
-        </Reveal>
+        <Reveal><div className={styles.rule} /></Reveal>
 
         {/* ══ VISION ══ */}
         <div ref={visionRef} className={styles.visionRow}>
-          <SectionLabel n="04" text="Vision" inView={visionInView} />
+          <SectionLabel n="04" text="Vision" inView={visionInView} styles={styles} />
           <motion.div
             className={styles.visionBox}
             variants={fUp(0.1)}
@@ -342,14 +207,11 @@ export default function About() {
           </motion.div>
         </div>
 
-        {/* ── Rule ── */}
-        <Reveal>
-          <div className={styles.rule} />
-        </Reveal>
+        <Reveal><div className={styles.rule} /></Reveal>
 
         {/* ══ BEYOND CODE ══ */}
         <div ref={beyondRef} className={styles.beyondRow}>
-          <SectionLabel n="05" text="Beyond Code" inView={beyondInView} />
+          <SectionLabel n="05" text="Beyond Code" inView={beyondInView} styles={styles} />
           <div className={styles.beyondContent}>
             <motion.p
               className={styles.body}

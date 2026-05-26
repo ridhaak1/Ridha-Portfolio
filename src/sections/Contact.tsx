@@ -1,48 +1,14 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import styles from "./Contact.module.css";
-import { SiGithub, SiLinkerd, SiGmail, SiWhatsapp } from "react-icons/si";
+import { SiGmail } from "react-icons/si";
 import { HiArrowUpRight } from "react-icons/hi2";
+import { contacts } from "../data/contact";
 
 const fadeUp = (delay = 0) => ({
   hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, delay } },
 });
-
-const contacts = [
-  {
-    icon: SiGmail,
-    label: "Email",
-    value: "info.ridha.dev@gmail.com",
-    href: "mailto:info.ridha.dev@gmail.com",
-    desc: "Best for project inquiries",
-  },
-  {
-    icon: SiGithub,
-    label: "GitHub",
-    value: "github.com/ridhaak1",
-    href: "https://github.com/ridhaak1",
-    desc: "Explore my open-source work",
-  },
-  {
-    icon: SiWhatsapp,
-    label: "WhatsApp",
-    value: "+32 467 792 949",
-    href: "https://wa.me/32467792949",
-    desc: "Quick chats & real-time talks",
-  },
-  {
-    icon: SiLinkerd,
-    label: "LinkedIn",
-    value: "Ridha Al-Khaykanee",
-    href: "https://linkedin.com/in/ridha-al-khaykanee-63928235a",
-    desc: "Professional network",
-  },
-];
 
 export default function Contact() {
   const ref = useRef(null);
@@ -54,7 +20,6 @@ export default function Contact() {
       <div className={styles.bgGrid} aria-hidden />
 
       <div className={styles.inner}>
-        {/* Availability badge */}
         <motion.div
           className={styles.badge}
           variants={fadeUp(0)}
@@ -65,7 +30,6 @@ export default function Contact() {
           Available for new projects
         </motion.div>
 
-        {/* Headline */}
         <motion.h2
           className={styles.headline}
           variants={fadeUp(0.1)}
@@ -77,7 +41,6 @@ export default function Contact() {
           <span>Extraordinary.</span>
         </motion.h2>
 
-        {/* Description */}
         <motion.p
           className={styles.desc}
           variants={fadeUp(0.2)}
@@ -89,7 +52,6 @@ export default function Contact() {
           into something the world remembers.
         </motion.p>
 
-        {/* Contact Cards */}
         <motion.div
           className={styles.grid}
           variants={fadeUp(0.3)}
@@ -105,9 +67,7 @@ export default function Contact() {
               className={styles.card}
             >
               <div className={styles.cardTop}>
-                <div className={styles.iconWrap}>
-                  <Icon />
-                </div>
+                <div className={styles.iconWrap}><Icon /></div>
                 <HiArrowUpRight className={styles.arrow} />
               </div>
               <span className={styles.cardLabel}>{label}</span>
@@ -117,7 +77,6 @@ export default function Contact() {
           ))}
         </motion.div>
 
-        {/* Primary CTA */}
         <motion.div
           variants={fadeUp(0.5)}
           initial="hidden"
@@ -130,7 +89,6 @@ export default function Contact() {
           </a>
         </motion.div>
 
-        {/* Signature */}
         <motion.footer
           className={styles.signature}
           variants={fadeUp(0.65)}

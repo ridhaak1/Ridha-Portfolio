@@ -1,248 +1,179 @@
 import { useRef } from "react";
+import { motion, useInView, useScroll, useTransform, type Variants } from "framer-motion";
 import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-  type Variants,
-} from "framer-motion";
+  HiOutlineMapPin,
+  HiOutlineUser,
+  HiOutlineRectangleStack,
+  HiOutlineBookOpen,
+  HiOutlineCursorArrowRays,
+} from "react-icons/hi2";
 import styles from "./About.module.css";
-import { HOOK_WORDS, STRENGTHS, BEYOND } from "../data/about";
-import Reveal from "../components/ui/Reveal";
-import SectionLabel from "../components/ui/SectionLabel";
+import { STRENGTHS } from "../data/about";
 import SectionTag from "../components/ui/SectionTag";
 
 const SPRING: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const ts = (delay = 0, dur = 0.6) => ({
-  duration: dur, ease: SPRING, delay,
-});
 
 const fUp = (d = 0): Variants => ({
-  hidden: { opacity: 0, y: 18 },
-  visible: { opacity: 1, y: 0, transition: ts(d) },
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SPRING, delay: d } },
 });
-const barV: Variants = {
-  hidden: { scaleX: 0 },
-  visible: { scaleX: 1, transition: { duration: 0.7, ease: SPRING, delay: 0.1 } },
-};
-const charV: Variants = {
-  hidden: { opacity: 0, y: 30, rotateX: -40 },
-  visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.55, ease: SPRING } },
+const fIn = (d = 0): Variants => ({
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.5, delay: d } },
+});
+const lineV: Variants = {
+  hidden:   { scaleX: 0 },
+  visible:  { scaleX: 1, transition: { duration: 0.9, ease: SPRING, delay: 0.08 } },
 };
 
-function Word({ word, i, inView }: { word: string; i: number; inView: boolean }) {
-  const isAccent = word === "Creation.";
-  return (
-    <span className={styles.wordOuter}>
-      <motion.span
-        className={`${styles.word} ${isAccent ? styles.wordAccent : ""}`}
-        variants={charV}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        transition={{ duration: 0.55, ease: SPRING, delay: 0.05 + i * 0.1 }}
-      >
-        {word}
-      </motion.span>
-    </span>
-  );
-}
+const INFO_ROWS = [
+  { icon: HiOutlineMapPin,         label: "Location", value: "Brussels, Belgium"      },
+  { icon: HiOutlineUser,           label: "Role",     value: "Full-Stack Developer"   },
+  { icon: HiOutlineRectangleStack, label: "Focus",    value: "Web · Mobile · SaaS"    },
+  { icon: null,                    label: "Status",   value: "Open to remote · Europe", dot: true },
+];
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const tagRef     = useRef<HTMLDivElement>(null);
+  const topRef     = useRef<HTMLDivElement>(null);
+  const storyRef   = useRef<HTMLDivElement>(null);
+  const strRef     = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const numY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const bigNumY = useTransform(scrollYProgress, [0, 1], ["0px", "-60px"]);
-
-  const tagRef = useRef<HTMLDivElement>(null);
-  const hookRef = useRef<HTMLDivElement>(null);
-  const journeyRef = useRef<HTMLDivElement>(null);
-  const philoRef = useRef<HTMLDivElement>(null);
-  const strRef = useRef<HTMLDivElement>(null);
-  const visionRef = useRef<HTMLDivElement>(null);
-  const beyondRef = useRef<HTMLDivElement>(null);
-
-  const tagInView = useInView(tagRef, { once: true, margin: "-60px" });
-  const hookInView = useInView(hookRef, { once: true, margin: "-60px" });
-  const journeyInView = useInView(journeyRef, { once: true, margin: "-60px" });
-  const philoInView = useInView(philoRef, { once: true, margin: "-60px" });
-  const strInView = useInView(strRef, { once: true, margin: "-60px" });
-  const visionInView = useInView(visionRef, { once: true, margin: "-60px" });
-  const beyondInView = useInView(beyondRef, { once: true, margin: "-60px" });
+  const tagInView   = useInView(tagRef,   { once: true, margin: "-60px" });
+  const topInView   = useInView(topRef,   { once: true, margin: "-60px" });
+  const storyInView = useInView(storyRef, { once: true, margin: "-60px" });
+  const strInView   = useInView(strRef,   { once: true, margin: "-60px" });
 
   return (
     <section ref={sectionRef} className={styles.about} id="about">
       <div className={styles.gridBg} aria-hidden="true" />
-      <div className={styles.vLine} aria-hidden="true" />
       <div className={`${styles.corner} ${styles.tl}`} aria-hidden="true" />
       <div className={`${styles.corner} ${styles.br}`} aria-hidden="true" />
-
-      <motion.div className={styles.bigNum} style={{ y: bigNumY }} aria-hidden="true">
-        02
-      </motion.div>
+      <motion.div className={styles.bigNum} style={{ y: numY }} aria-hidden="true">02</motion.div>
 
       <div className={styles.inner}>
+
         {/* ── Tag ── */}
         <div ref={tagRef}>
           <SectionTag number="02" label="About" inView={tagInView} styles={styles} />
         </div>
 
-        {/* ══ HOOK ══ */}
-        <div ref={hookRef} className={styles.hookWrap}>
-          <div className={styles.hook} aria-label="From Curiosity to Creation.">
-            {HOOK_WORDS.map((w, i) => (
-              <Word key={w} word={w} i={i} inView={hookInView} />
-            ))}
-          </div>
-          <motion.div
-            className={styles.hookRule}
-            variants={barV}
-            initial="hidden"
-            animate={hookInView ? "visible" : "hidden"}
-            style={{ originX: 0 }}
-          />
-        </div>
+        {/* ══ TOP: statement + info card ══ */}
+        <div ref={topRef} className={styles.topGrid}>
 
-        {/* ══ JOURNEY ══ */}
-        <div ref={journeyRef} className={styles.journeyRow}>
-          <div className={styles.journeyLeft}>
-            <SectionLabel n="01" text="Journey" inView={journeyInView} styles={styles} />
-            <motion.p
-              className={styles.bodyLg}
-              variants={fUp(0.1)}
+          {/* Statement col */}
+          <div className={styles.statementCol}>
+            <motion.h2 className={styles.statement} variants={fUp(0)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
+              I'm driven by one thing —{" "}
+              <span className={styles.accent}>
+                turning ideas into something real, structured, and meaningful.
+              </span>
+            </motion.h2>
+
+            <motion.div
+              className={styles.rule}
+              variants={lineV}
               initial="hidden"
-              animate={journeyInView ? "visible" : "hidden"}
-            >
-              Started coding{" "}
-              <span className={styles.hi}>long before college.</span> HTML, CSS,
-              JavaScript — learned it all self-driven, out of pure obsession with building things.
+              animate={topInView ? "visible" : "hidden"}
+              style={{ originX: 0 }}
+            />
+
+            <motion.p className={styles.subText} variants={fUp(0.12)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
+              I care about how things are built as much as what is built.
+              Structure, clarity, and intention matter.
+              Because good products aren't just functional —
+              they feel right to use, maintain, and grow.
             </motion.p>
           </div>
 
-          <motion.div
-            className={styles.journeyCard}
-            variants={fUp(0.18)}
-            initial="hidden"
-            animate={journeyInView ? "visible" : "hidden"}
-          >
-            <div className={styles.jCardTag}>Plot twist</div>
-            <p className={styles.jCardText}>
-              Enrolled in <em>International Business Entrepreneurship</em> —
-              then pivoted back to code. Because some callings don't wait.
+          {/* Info card */}
+          <motion.div className={styles.infoCard} variants={fUp(0.15)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
+            {INFO_ROWS.map((row) => {
+              const Icon = row.icon;
+              return (
+                <div key={row.label} className={styles.infoRow}>
+                  <div className={styles.infoIconBox}>
+                    {row.dot
+                      ? <span className={styles.infoDot} aria-hidden="true" />
+                      : Icon && <Icon size={15} />
+                    }
+                  </div>
+                  <div className={styles.infoText}>
+                    <span className={styles.infoLabel}>{row.label}</span>
+                    <span className={styles.infoValue}>{row.value}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
+
+        {/* ── Divider ── */}
+        <motion.div className={styles.divider} variants={lineV} initial="hidden" animate={topInView ? "visible" : "hidden"} style={{ originX: 0 }} />
+
+        {/* ══ STORY: Background + Approach ══ */}
+        <div ref={storyRef} className={styles.storyGrid}>
+
+          {/* Background */}
+          <motion.div className={styles.storyBlock} variants={fUp(0)} initial="hidden" animate={storyInView ? "visible" : "hidden"}>
+            <div className={styles.storyIconCircle}><HiOutlineBookOpen size={18} /></div>
+            <span className={styles.eyebrow}>Background</span>
+            <h3 className={styles.storyTitle}>Curiosity led the way.</h3>
+            <p className={styles.storyText}>
+              I started with nothing but curiosity — teaching myself how
+              things work, then how to build them. I explored different
+              paths, but always found my way back to code.
+              Not because I had to — but because it felt right.
+            </p>
+          </motion.div>
+
+          {/* Approach */}
+          <motion.div className={styles.storyBlock} variants={fUp(0.1)} initial="hidden" animate={storyInView ? "visible" : "hidden"}>
+            <div className={styles.storyIconCircle}><HiOutlineCursorArrowRays size={18} /></div>
+            <span className={styles.eyebrow}>Approach</span>
+            <h3 className={styles.storyTitle}>Intentional. Focused. Built to last.</h3>
+            <p className={styles.storyText}>
+              I think in systems, not shortcuts. I plan before I build,
+              write with purpose, and refine relentlessly.
+              The goal isn't just to deliver —
+              it's to create value that lasts.
             </p>
           </motion.div>
         </div>
 
-        <Reveal><div className={styles.rule} /></Reveal>
-
-        {/* ══ PHILOSOPHY ══ */}
-        <div ref={philoRef} className={styles.philoWrap}>
-          <SectionLabel n="02" text="Philosophy" inView={philoInView} styles={styles} />
-          <motion.blockquote
-            className={styles.quote}
-            variants={fUp(0.1)}
-            initial="hidden"
-            animate={philoInView ? "visible" : "hidden"}
-          >
-            "Programming is an open universe —{" "}
-            <span className={styles.quoteHi}>limitless possibilities,</span>{" "}
-            immediate results, and the thrill of systems that truly work."
-          </motion.blockquote>
-          <motion.p
-            className={styles.body}
-            variants={fUp(0.2)}
-            initial="hidden"
-            animate={philoInView ? "visible" : "hidden"}
-          >
-            I build products that are functional, scalable, and efficient. Clean
-            code isn't a preference — it's a standard.
-          </motion.p>
-        </div>
-
-        <Reveal><div className={styles.rule} /></Reveal>
+        {/* ── Divider ── */}
+        <motion.div className={styles.divider} variants={lineV} initial="hidden" animate={storyInView ? "visible" : "hidden"} style={{ originX: 0 }} />
 
         {/* ══ STRENGTHS ══ */}
-        <div ref={strRef} className={styles.strWrap}>
-          <SectionLabel n="03" text="Strengths" inView={strInView} styles={styles} />
-          <div className={styles.strGrid}>
-            {STRENGTHS.map((s, i) => (
-              <motion.div
-                key={s.n}
-                className={styles.strCard}
-                variants={fUp(i * 0.09)}
-                initial="hidden"
-                animate={strInView ? "visible" : "hidden"}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              >
-                <span className={styles.strN}>{s.n}</span>
-                <span className={styles.strLabel}>{s.label}</span>
-                <span className={styles.strDetail}>{s.detail}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <Reveal><div className={styles.rule} /></Reveal>
-
-        {/* ══ VISION ══ */}
-        <div ref={visionRef} className={styles.visionRow}>
-          <SectionLabel n="04" text="Vision" inView={visionInView} styles={styles} />
-          <motion.div
-            className={styles.visionBox}
-            variants={fUp(0.1)}
-            initial="hidden"
-            animate={visionInView ? "visible" : "hidden"}
-          >
-            <p className={styles.bodyLg}>
-              Build <span className={styles.hi}>my own products.</span> Serve
-              European teams remotely. High-level solutions, professional
-              approach — available whenever needed.
-            </p>
-            <div className={styles.vBadge}>
-              <span className={styles.vDot} aria-hidden="true" />
-              Open to remote roles · Europe
-            </div>
+        <div ref={strRef} className={styles.strSection}>
+          <motion.span className={styles.strEyebrow} variants={fIn(0)} initial="hidden" animate={strInView ? "visible" : "hidden"}>
+            Strengths
+          </motion.span>
+          <motion.div className={styles.strTable} variants={fIn(0.05)} initial="hidden" animate={strInView ? "visible" : "hidden"}>
+            {STRENGTHS.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <motion.div
+                  key={s.n}
+                  className={styles.strRow}
+                  variants={fUp(i * 0.07)}
+                  initial="hidden"
+                  animate={strInView ? "visible" : "hidden"}
+                >
+                  <span className={styles.strN}>{s.n}</span>
+                  <div className={styles.strIconBox}><Icon size={15} /></div>
+                  <span className={styles.strLabel}>{s.label}</span>
+                  <span className={styles.strLine} aria-hidden="true" />
+                  <span className={styles.strDetail}>{s.detail}</span>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
 
-        <Reveal><div className={styles.rule} /></Reveal>
-
-        {/* ══ BEYOND CODE ══ */}
-        <div ref={beyondRef} className={styles.beyondRow}>
-          <SectionLabel n="05" text="Beyond Code" inView={beyondInView} styles={styles} />
-          <div className={styles.beyondContent}>
-            <motion.p
-              className={styles.body}
-              variants={fUp(0.1)}
-              initial="hidden"
-              animate={beyondInView ? "visible" : "hidden"}
-            >
-              <span className={styles.hi}>Philosophy · Reading.</span> Always
-              seeking knowledge. Football and gym — keeping mind and body at
-              their sharpest.
-            </motion.p>
-            <div className={styles.beyondTags}>
-              {BEYOND.map((b, i) => (
-                <motion.span
-                  key={b}
-                  className={styles.beyondTag}
-                  variants={fUp(0.1 + i * 0.07)}
-                  initial="hidden"
-                  animate={beyondInView ? "visible" : "hidden"}
-                  whileHover={{
-                    borderColor: "rgba(245,166,35,0.45)",
-                    color: "#F5A623",
-                    transition: { duration: 0.2 },
-                  }}
-                >
-                  {b}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Get-ChildItem -Path c:\\\\Ridha-Portfolio\\\\src -Recurse | Where-Object { $_.Extension -in '.tsx', '.ts', '.jsx', '.js', '.css' } | Select-Object FullName, @{Name=\"Size\\(bytes\\)\"; Expression={$_.Length}} | Sort-Object FullName)"
+      "PowerShell(Get-ChildItem -Path c:\\\\Ridha-Portfolio\\\\src -Recurse | Where-Object { $_.Extension -in '.tsx', '.ts', '.jsx', '.js', '.css' } | Select-Object FullName, @{Name=\"Size\\(bytes\\)\"; Expression={$_.Length}} | Sort-Object FullName)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
     ]
   }
 }

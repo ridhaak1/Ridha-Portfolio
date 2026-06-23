@@ -203,6 +203,11 @@ export default function SideDrawer({ project, onClose }: SideDrawerProps) {
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                 </svg>
               </motion.a>
+            ) : project.status === "in-progress" ? (
+              <span className={styles.btnProgress}>
+                <span className={styles.btnDot} aria-hidden="true" />
+                Currently in development
+              </span>
             ) : (
               <span className={styles.btnDisabled}>Demo not available</span>
             )}

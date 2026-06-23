@@ -17,11 +17,13 @@ interface ProjectCardProps {
 export default function ProjectCard({ project, index, onSelect, isActive }: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inProgress = project.status === "in-progress";
 
   return (
     <motion.div
       ref={ref}
-      className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
+      className={`${styles.card} ${isActive ? styles.cardActive : ""} ${inProgress ? styles.cardInProgress : ""}`}
+      style={{ "--card-accent": project.accent } as React.CSSProperties}
       variants={{
         hidden: { opacity: 0, y: 24 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: SPRING, delay: index * 0.1 } },
@@ -52,7 +54,7 @@ export default function ProjectCard({ project, index, onSelect, isActive }: Proj
         <div className={styles.cardTop}>
           <span className={styles.cardIndex}>{project.index}</span>
           <span
-            className={styles.cardBadge}
+            className={`${styles.cardBadge} ${inProgress ? styles.badgeProgress : ""}`}
             style={{ "--badge-accent": project.accent } as React.CSSProperties}
           >
             {project.badge}
@@ -70,7 +72,7 @@ export default function ProjectCard({ project, index, onSelect, isActive }: Proj
             ))}
           </div>
           <div className={styles.cardCta}>
-            <span className={styles.cardCtaTxt}>View project</span>
+            <span className={styles.cardCtaTxt}>{inProgress ? "In development" : "View project"}</span>
             <svg viewBox="0 0 16 16" className={styles.cardCtaArrow} aria-hidden="true">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

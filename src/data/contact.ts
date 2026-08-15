@@ -1,5 +1,5 @@
 import { SiGithub, SiGmail, SiWhatsapp } from "react-icons/si";
-import { SiLinkerd } from "react-icons/si";
+import { FaLinkedin } from "react-icons/fa6";
 import type { IconType } from "react-icons";
 
 export interface ContactItem {
@@ -33,7 +33,7 @@ export const contacts: ContactItem[] = [
     desc: "Quick chats & real-time talks",
   },
   {
-    icon: SiLinkerd,
+    icon: FaLinkedin,
     label: "LinkedIn",
     value: "Ridha Al-Khaykanee",
     href: "https://linkedin.com/in/ridha-al-khaykanee-63928235a",

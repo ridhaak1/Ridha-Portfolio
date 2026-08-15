@@ -1,7 +1,7 @@
 import adminImg from "../assets/images/adminpanel.png";
 import reviewnest from "../assets/images/reviewnest.png";
 import gustoItaliano from "../assets/images/gustoitaliano.png";
-import ajib from "../assets/images/ajibfoto.png";
+import ajib from "../assets/images/ajibhome.png";
 
 export type VisualType = "image" | "console";
 export type ProjectStatus = "completed" | "in-progress";
@@ -30,7 +30,7 @@ export const PROJECTS: Project[] = [
     index: "01",
     type: "AI Education Platform",
     badge: "In Progress",
-    title: "Ajib (أجب)",
+    title: "Ajib",
     tagline: "Any study material becomes your next exam.",
     description:
       "An AI-powered educational platform that transforms any study material into a personalized exam experience. Students upload a PDF or document, and the platform generates questions, evaluates answers, and adapts to each student's weak points over time.",
@@ -86,7 +86,7 @@ export const PROJECTS: Project[] = [
       "Multi-channel review aggregation",
     ],
     tags: ["React", "C#", ".NET", "SQL"],
-    github: "https://github.com",
+    github: "https://github.com/ridhaak1",
     demo: null,
     image: reviewnest,
     visual: "image",
@@ -129,7 +129,7 @@ export const PROJECTS: Project[] = [
       "Built collaboratively as a team project",
     ],
     tags: ["Fullstack", "Team Project"],
-    github: "https://github.com/ridhaak1/Bib_ridha.git",
+    github: "https://github.com/ridhaak1",
     demo: "https://wpl-five.vercel.app/",
     image: gustoItaliano,
     visual: "image",

@@ -244,7 +244,6 @@ export default function Hero() {
 
           <motion.div className={styles.photoCap} variants={fadeUp(0.85)} initial="hidden" animate="visible">
             <div className={styles.capName}>Ridha</div>
-            <div className={styles.capLoc}>Brussels · EU</div>
           </motion.div>
         </div>
 

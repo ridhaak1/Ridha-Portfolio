@@ -19,6 +19,16 @@ const lineV: Variants = {
   visible:  { scaleX: 1, transition: { duration: 0.9, ease: SPRING, delay: 0.08 } },
 };
 
+<<<<<<< HEAD
+=======
+const INFO_ROWS = [
+  { icon: HiOutlineMapPin,         label: "Location", value: "Antwerp, Belgium"       },
+  { icon: HiOutlineUser,           label: "Role",     value: "Full-Stack Developer"   },
+  { icon: HiOutlineRectangleStack, label: "Focus",    value: "Web · Mobile · SaaS"    },
+  { icon: null,                    label: "Status",   value: "Open to remote · Europe", dot: true },
+];
+
+>>>>>>> 806975baf8f066be2727dff04253ec58de95df4b
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const tagRef     = useRef<HTMLDivElement>(null);

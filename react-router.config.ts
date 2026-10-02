@@ -13,6 +13,6 @@ export default {
   // Every published post gets its own static HTML file
   async prerender() {
     const slugs = await getPublishedSlugs();
-    return ["/", "/blog", ...slugs.map((slug) => `/blog/${slug}`)];
+    return ["/", "/blog", "/404", ...slugs.map((slug) => `/blog/${slug}`)];
   },
 } satisfies Config;

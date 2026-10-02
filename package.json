@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "react-router dev",
     "dev:drafts": "react-router dev --mode drafts",
-    "build": "react-router typegen && tsc -b && react-router build",
+    "build": "react-router typegen && tsc -b && react-router build && node scripts/move-404.mjs",
     "typecheck": "react-router typegen && tsc -b",
     "lint": "eslint .",
     "preview": "vite preview --outDir build/client"

@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# React Router
+/build
+.react-router/
+
 # TypeScript build info
 *.tsbuildinfo

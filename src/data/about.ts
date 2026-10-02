@@ -48,7 +48,7 @@ export const SUBTEXT =
   "I care about how things are built as much as what is built. Structure, clarity, and intention matter. Because good products aren't just functional — they feel right to use, maintain, and grow.";
 
 export const INFO_ROWS: InfoRow[] = [
-  { icon: HiOutlineMapPin, label: "Location", value: "Brussels, Belgium" },
+  { icon: HiOutlineMapPin, label: "Location", value: "Antwerp, Belgium" },
   { icon: HiOutlineUser, label: "Role", value: "Full-Stack Developer" },
   { icon: HiOutlineRectangleStack, label: "Focus", value: "Web · Mobile · SaaS" },
   { icon: null, label: "Status", value: "Open to remote · Europe", dot: true },

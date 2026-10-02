@@ -8,6 +8,6 @@ interface CardVisualProps {
 
 export default function CardVisual({ project }: CardVisualProps) {
   if (project.visual === "image" && project.image)
-    return <img src={project.image} alt={project.title} className={styles.cardImg} />;
+    return <img src={project.image} alt={project.title} className={styles.cardImg} loading="lazy" decoding="async" />;
   return <ConsoleMini />;
 }

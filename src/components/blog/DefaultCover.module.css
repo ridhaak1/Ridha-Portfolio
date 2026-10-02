@@ -1,0 +1,75 @@
+.cover {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(245, 166, 35, 0.18), transparent 42%),
+    radial-gradient(circle, rgba(245, 166, 35, 0.06) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(160deg, #11151c 0%, #07090d 72%);
+}
+
+/* Thin amber line along the top, like the Hero */
+.cover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 166, 35, 0.6) 50%, transparent);
+}
+
+.inner {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6cqw 7cqw;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.15em;
+  font-family: var(--font-display);
+  font-size: clamp(14px, 4.5cqw, 40px);
+  line-height: 1;
+  letter-spacing: 0.15em;
+  color: var(--color-text);
+}
+
+.bar {
+  width: 0.6em;
+  height: 0.08em;
+  margin-bottom: 0.14em;
+  background: var(--color-accent);
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5cqw;
+}
+
+.label {
+  font-size: clamp(9px, 1.6cqw, 13px);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(245, 166, 35, 0.8);
+}
+
+.title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 90%;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 7.5cqw, 64px);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--color-text);
+}

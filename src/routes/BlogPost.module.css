@@ -1,0 +1,154 @@
+.post {
+  padding: calc(var(--header-h) + 72px) 52px 128px;
+  font-size: 18px; /* base for the reading column and prose (em) */
+}
+
+/* Reading column shared by header, body and footer.
+   38em ≈ 75–80 characters per line in DM Sans (its "ch" is wide, so 70ch ≈ 95). */
+.column {
+  max-width: 38em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Header ── */
+.back {
+  display: inline-block;
+  margin-bottom: 36px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.55);
+  transition: color 0.25s;
+}
+
+.back:hover {
+  color: var(--color-accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(44px, 7vw, 84px);
+  line-height: 0.95;
+  letter-spacing: 2px;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin-top: 24px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  color: var(--color-text-muted);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: rgba(240, 237, 232, 0.6);
+  transition:
+    color 0.25s,
+    border-color 0.25s;
+}
+
+.tag:hover {
+  color: var(--color-accent);
+  border-color: rgba(245, 166, 35, 0.5);
+}
+
+.warnings {
+  margin-bottom: 32px;
+}
+
+/* ── Cover ── */
+.cover {
+  position: relative;
+  max-width: 1040px;
+  margin: 48px auto 64px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* Shown instead of the cover when a post has no photo */
+.rule {
+  margin-top: 36px;
+  margin-bottom: 44px;
+}
+
+.rule::before {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+/* ── Footer ── */
+.foot {
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--color-border);
+}
+
+.foot .back {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .post {
+    padding: calc(var(--header-h) + 56px) 32px 96px;
+  }
+}
+
+@media (max-width: 600px) {
+  .post {
+    padding: calc(var(--header-h) + 32px) 20px 72px;
+    font-size: 17px;
+  }
+
+  .back {
+    margin-bottom: 24px;
+  }
+
+  .cover {
+    margin: 32px -20px 40px; /* full-bleed on phones */
+    aspect-ratio: 4 / 3;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}

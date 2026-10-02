@@ -1,9 +1,5 @@
 import { SiGithub, SiGmail, SiWhatsapp } from "react-icons/si";
-<<<<<<< HEAD
-import { FaLinkedin } from "react-icons/fa";
-=======
 import { FaLinkedin } from "react-icons/fa6";
->>>>>>> 806975baf8f066be2727dff04253ec58de95df4b
 import type { IconType } from "react-icons";
 
 export type ContactId = "email" | "github" | "whatsapp" | "linkedin";
@@ -43,10 +39,7 @@ export const contacts: ContactItem[] = [
     desc: "Quick chats & real-time talks",
   },
   {
-<<<<<<< HEAD
     id: "linkedin",
-=======
->>>>>>> 806975baf8f066be2727dff04253ec58de95df4b
     icon: FaLinkedin,
     label: "LinkedIn",
     value: "Ridha Al-Khaykanee",

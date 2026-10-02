@@ -25,6 +25,9 @@
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Layout */
+  --header-h: 72px;
+
   /* Z-index scale */
   --z-bg: 0;
   --z-overlay: 1;
@@ -32,6 +35,14 @@
   --z-content: 10;
   --z-ui: 15;
   --z-top: 20;
+  --z-menu: 90;
+  --z-header: 100;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --header-h: 64px;
+  }
 }
 
 /* ── Reset ── */
@@ -75,4 +86,21 @@ button {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* ── Anchored sections land below the fixed header ── */
+section[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+/* ── Keyboard focus ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

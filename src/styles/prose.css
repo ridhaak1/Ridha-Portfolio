@@ -1,0 +1,214 @@
+/* ═══════════════════════════════════════════════════════════
+   Prose — long-form reading typography (blog posts).
+   Usage: <div class="prose">…rendered Markdown…</div>
+   Font size and measure come from the parent; everything here is in em.
+   ═══════════════════════════════════════════════════════════ */
+
+.prose {
+  --prose-text: rgba(240, 237, 232, 0.8);
+  --prose-heading: var(--color-text);
+  --prose-muted: rgba(240, 237, 232, 0.55);
+  --prose-rule: var(--color-border);
+  --prose-code-bg: #0c0f14;
+
+  color: var(--prose-text);
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.8;
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: 1.25em;
+}
+
+/* ── Headings ── */
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--prose-heading);
+  scroll-margin-top: calc(var(--header-h) + 16px);
+  text-wrap: balance;
+}
+
+.prose h2 {
+  margin-top: 2.4em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2em;
+  line-height: 1.05;
+  letter-spacing: 1px;
+}
+
+.prose h3 {
+  margin-top: 2em;
+  font-size: 1.2em;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.prose h4 {
+  margin-top: 1.75em;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + * {
+  margin-top: 0.75em;
+}
+
+/* ── Text ── */
+.prose strong {
+  font-weight: 500;
+  color: var(--prose-heading);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(245, 166, 35, 0.4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.25s;
+}
+
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+/* ── Lists ── */
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.45em;
+}
+
+.prose li::marker {
+  color: var(--color-accent);
+}
+
+.prose ol > li::marker {
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.45em;
+}
+
+/* ── Blockquote ── */
+.prose blockquote {
+  padding: 0.2em 0 0.2em 1.4em;
+  border-left: 2px solid var(--color-accent);
+  font-size: 1.1em;
+  font-style: italic;
+  color: var(--prose-heading);
+}
+
+.prose blockquote p + p {
+  margin-top: 0.5em;
+  font-size: 0.82em;
+  font-style: normal;
+  color: var(--prose-muted);
+}
+
+/* ── Code ── */
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  font-weight: 400;
+}
+
+.prose :not(pre) > code {
+  padding: 0.15em 0.4em;
+  border: 1px solid var(--prose-rule);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f3c27a;
+}
+
+.prose pre {
+  position: relative;
+  margin-top: 1.75em;
+  margin-bottom: 1.75em;
+  padding: 1.4em 1.5em;
+  border: 1px solid var(--prose-rule);
+  border-radius: 12px;
+  background-color: var(--prose-code-bg) !important; /* overrides Shiki's theme background */
+  font-size: 0.85em;
+  line-height: 1.7;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.prose pre code {
+  font-size: 1em;
+}
+
+/* Language label, set by the Shiki transformer in render.server.ts */
+.prose pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.7em;
+  right: 1em;
+  font-family: var(--font-body);
+  font-size: 0.75em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+/* ── Media ── */
+.prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--prose-rule);
+  border-radius: 12px;
+}
+
+.prose p:has(> img:only-child) {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+/* ── Rules & tables ── */
+.prose hr {
+  margin: 3em 0;
+  border: none;
+  border-top: 1px solid var(--prose-rule);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.prose th,
+.prose td {
+  padding: 0.6em 0.8em;
+  border-bottom: 1px solid var(--prose-rule);
+  text-align: left;
+}
+
+.prose th {
+  font-weight: 500;
+  color: var(--prose-heading);
+}
+
+@media (max-width: 600px) {
+  .prose h2 {
+    font-size: 1.75em;
+  }
+
+  .prose pre {
+    padding: 1.2em 1.1em;
+    border-radius: 10px;
+  }
+}

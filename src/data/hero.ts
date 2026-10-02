@@ -1,3 +1,5 @@
+import deskdriveMark from "../assets/images/deskdrive-mark.svg";
+
 export const PHRASES = [
   "Building scalable web applications",
   "Crafting clean UI/UX experiences",
@@ -17,3 +19,13 @@ export const STACK: Array<{
   { sym: "📱", label: "Mobile", color: "inherit" },
   { sym: "SQL", label: "SQL / DB", color: "rgba(150,200,120,.65)", mono: true },
 ];
+
+/** Internship blog card under the Hero socials. The blog itself is in Dutch. */
+export const INTERNSHIP = {
+  company: "Deskdrive",
+  logo: deskdriveMark,
+  label: "Live · Internship blog · NL",
+  textBefore: "Currently interning at",
+  textAfter: "— follow my internship journey (in Dutch)",
+  href: "/blog",
+};

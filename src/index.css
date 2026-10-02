@@ -1,6 +1,0 @@
-/* Global reset & root — portfolio-specific overrides */
-
-#root {
-  width: 100%;
-  min-height: 100dvh;
-}

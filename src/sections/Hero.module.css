@@ -180,7 +180,8 @@
   grid-template-columns: 1fr 210px 1fr;
   grid-template-areas: "left center right";
   align-items: center;
-  padding: 48px 52px 0;
+  /* top padding keeps the content clear of the fixed header */
+  padding: calc(var(--header-h) + 16px) 52px 0;
   gap: 40px;
   max-width: 1280px;
   margin: 0 auto;
@@ -399,6 +400,107 @@
   width: 14px;
   height: 14px;
   fill: currentColor;
+}
+
+/* ── Internship blog card ── */
+.internWrap {
+  margin-top: 22px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.intern {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px 12px 12px;
+  border: 1px solid var(--accent-border);
+  background: rgba(245, 166, 35, 0.045);
+  text-align: left;
+  transition: border-color 0.28s;
+}
+
+/* Hover glow — opacity only */
+.intern::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  box-shadow:
+    0 0 28px rgba(245, 166, 35, 0.2),
+    inset 0 0 22px rgba(245, 166, 35, 0.07);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.intern:hover,
+.intern:focus-visible {
+  border-color: rgba(245, 166, 35, 0.6);
+}
+
+.intern:hover::after,
+.intern:focus-visible::after {
+  opacity: 1;
+}
+
+.internLogo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-faint);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.internLogo img {
+  width: 20px;
+  height: 20px;
+}
+
+.internBody {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.internLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245, 166, 35, 0.8);
+}
+
+.internText {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.45;
+  color: rgba(240, 237, 232, 0.6);
+}
+
+.internText strong {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.internArrow {
+  margin-left: auto;
+  padding-left: 4px;
+  flex-shrink: 0;
+  font-size: 16px;
+  color: var(--accent);
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.intern:hover .internArrow,
+.intern:focus-visible .internArrow {
+  transform: translateX(4px);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -730,7 +832,7 @@
       "center"
       "left"
       "right";
-    padding: 40px 48px 0;
+    padding: calc(var(--header-h) + 16px) 48px 0;
     gap: 24px;
     align-items: center;
     justify-items: center;
@@ -776,6 +878,10 @@
   }
 
   .badge {
+    align-self: center;
+  }
+
+  .internWrap {
     align-self: center;
   }
 
@@ -826,6 +932,11 @@
     padding: 0 36px;
   }
 
+  /* Stacked layout reaches the bottom; the indicator would overlap the stack icons */
+  .scrollInd {
+    display: none;
+  }
+
   .bm:nth-child(2) {
     display: none;
   }
@@ -846,7 +957,7 @@
       "center"
       "left"
       "right";
-    padding: 40px 24px 0;
+    padding: calc(var(--header-h) + 12px) 24px 0;
     gap: 20px;
     align-items: center;
     justify-items: center;
@@ -989,5 +1100,10 @@
 
   .ltr {
     transition: none !important;
+  }
+
+  .intern::after,
+  .internArrow {
+    transition: none;
   }
 }

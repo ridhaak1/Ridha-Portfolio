@@ -1,8 +1,10 @@
 import { useRef, useEffect, useState, useCallback } from "react";
+import { Link } from "react-router";
 import { motion, type Variants, type Transition } from "framer-motion";
 import styles from "./Hero.module.css";
 import profilePhoto from "../assets/images/ridhacafe.png";
-import { PHRASES, STACK } from "../data/hero";
+import { INTERNSHIP, PHRASES, STACK } from "../data/hero";
+import { useSectionNav } from "../hooks/useSectionNav";
 import { contacts, type ContactId } from "../data/contact";
 
 interface MousePos { x: number; y: number; }
@@ -39,6 +41,7 @@ const HERO_SOCIALS = (["github", "linkedin", "email"] as const).map(
 );
 
 export default function Hero() {
+  const goToSection = useSectionNav();
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
@@ -203,13 +206,13 @@ export default function Hero() {
           <motion.div className={styles.cta} variants={fadeUp(1.65)} initial="hidden" animate="visible">
             <button
               className={styles.btnP}
-              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => goToSection("projects")}
             >
               View Work
             </button>
             <button
               className={styles.btnS}
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => goToSection("contact")}
             >
               Get in Touch
             </button>
@@ -229,6 +232,24 @@ export default function Hero() {
                 </svg>
               </a>
             ))}
+          </motion.div>
+
+          <motion.div className={styles.internWrap} variants={fadeUp(2.0)} initial="hidden" animate="visible">
+            <Link to={INTERNSHIP.href} className={styles.intern}>
+              <span className={styles.internLogo} aria-hidden="true">
+                <img src={INTERNSHIP.logo} alt="" width={20} height={20} />
+              </span>
+              <span className={styles.internBody}>
+                <span className={styles.internLabel}>
+                  <span className={styles.badgeDot} aria-hidden="true" />
+                  {INTERNSHIP.label}
+                </span>
+                <span className={styles.internText}>
+                  {INTERNSHIP.textBefore} <strong>{INTERNSHIP.company}</strong> {INTERNSHIP.textAfter}
+                </span>
+              </span>
+              <span className={styles.internArrow} aria-hidden="true">→</span>
+            </Link>
           </motion.div>
         </div>
 
@@ -290,7 +311,7 @@ export default function Hero() {
       </div>
 
       <div className={styles.botBar}>
-        <span className={styles.bm}>Brussels · Belgium</span>
+        <span className={styles.bm}>Antwerp · Belgium</span>
         <span className={styles.bm}>ridha.dev</span>
         <span className={styles.bm}>© 2026</span>
       </div>

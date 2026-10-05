@@ -1,5 +1,5 @@
 ---
-title: "Week 3: Werken met Java tijdens mijn stage"
+title: "Werken met Java tijdens mijn stage"
 date: "2026-10-02"
 summary: "Deze week werkte ik verder met Java en leerde ik hoe ik bestaande code beter kan begrijpen, aanpassen en testen."
 tags: [java, programmeren]
@@ -8,7 +8,7 @@ draft: false
 
 ---
 
-Deze week heb ik tijdens mijn stage verder gewerkt met **Java**. Omdat ik tijdens mijn opleiding al ervaring heb opgedaan met objectgeoriënteerd programmeren, waren sommige concepten herkenbaar. Toch merkte ik dat Java in een echte applicatie anders aanvoelt dan tijdens oefeningen op school.
+Tijdens mijn stage heb ik verder gewerkt met **Java**. Omdat ik tijdens mijn opleiding al ervaring heb opgedaan met objectgeoriënteerd programmeren, waren sommige concepten herkenbaar. Toch merkte ik dat Java in een echte applicatie anders aanvoelt dan tijdens oefeningen op school.
 
 ## Werken met bestaande Java-code
 

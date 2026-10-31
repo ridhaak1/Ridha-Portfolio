@@ -1,0 +1,15 @@
+/* Shared layout primitives. Apply in JSX next to the component's own class.
+   :where() keeps them at zero specificity, so component rules always override
+   them, whatever order the CSS chunks end up in. */
+
+:where(.container),
+:where(.grid) {
+  width: min(100% - 2 * var(--grid-margin), var(--grid-max));
+  margin-inline: auto;
+}
+
+:where(.grid) {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}

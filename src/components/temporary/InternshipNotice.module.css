@@ -1,0 +1,80 @@
+/* TEMPORARY — delete together with InternshipNotice.tsx */
+
+.notice {
+  position: fixed;
+  left: var(--grid-margin);
+  bottom: 52px; /* above the hero's bottom HUD line */
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  max-width: calc(100vw - 2 * var(--grid-margin));
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(calc(100% + 24px));
+  transition:
+    transform var(--dur-base) var(--ease-expo),
+    opacity var(--dur-fast) var(--ease-expo);
+}
+
+.notice[data-visible] {
+  opacity: 1;
+  transform: none;
+}
+
+.link {
+  padding: 9px 4px 9px 16px;
+  border-radius: 999px 0 0 999px;
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.arrow {
+  display: inline-block;
+  color: var(--accent);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 2px;
+  border-radius: 50%;
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.close:hover {
+  color: var(--ink);
+}
+
+.link:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* One line on phones */
+@media (max-width: 519px) {
+  .detail {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice {
+    transform: none;
+    transition: opacity var(--dur-fast) linear;
+  }
+}

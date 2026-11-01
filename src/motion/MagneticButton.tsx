@@ -9,10 +9,12 @@ type MagneticButtonProps = (
 ) & {
   /** Fraction of the cursor's offset from center the element follows */
   strength?: number;
+  /** Furthest it may lean, px */
+  max?: number;
 };
 
 /** Leans toward the cursor while hovered, springs back on leave. Fine pointers only. */
-export default function MagneticButton({ as = "button", strength = 0.3, ...props }: MagneticButtonProps) {
+export default function MagneticButton({ as = "button", strength = 0.3, max = Infinity, ...props }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -22,10 +24,14 @@ export default function MagneticButton({ as = "button", strength = 0.3, ...props
     const toX = gsap.quickTo(el, "x", { duration: DUR.fast, ease: EASE });
     const toY = gsap.quickTo(el, "y", { duration: DUR.fast, ease: EASE });
 
+    const limit = gsap.utils.clamp(-max, max);
     const onMove = (e: PointerEvent) => {
+      // Measured from where it rests: the rect moves as the element leans
       const rect = el.getBoundingClientRect();
-      toX((e.clientX - rect.left - rect.width / 2) * strength);
-      toY((e.clientY - rect.top - rect.height / 2) * strength);
+      const restX = rect.left - (gsap.getProperty(el, "x") as number);
+      const restY = rect.top - (gsap.getProperty(el, "y") as number);
+      toX(limit((e.clientX - restX - rect.width / 2) * strength));
+      toY(limit((e.clientY - restY - rect.height / 2) * strength));
     };
     const onLeave = () => {
       toX(0);
@@ -40,7 +46,7 @@ export default function MagneticButton({ as = "button", strength = 0.3, ...props
       gsap.killTweensOf(el);
       gsap.set(el, { clearProps: "transform" });
     };
-  }, [strength]);
+  }, [strength, max]);
 
   if (as === "a") {
     return <a ref={ref as React.Ref<HTMLAnchorElement>} {...(props as ComponentPropsWithoutRef<"a">)} />;

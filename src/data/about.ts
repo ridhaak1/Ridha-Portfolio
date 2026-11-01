@@ -9,43 +9,42 @@ import {
   siReact,
   siTypescript,
 } from "simple-icons";
-import { site } from "@/config/site";
 
-/** Parts with `em` are set in italic */
-export const STATEMENT: { text: string; em?: boolean }[] = [
-  { text: "I started with curiosity and stayed for the " },
-  { text: "craft.", em: true },
-  {
-    text: " Today I build web and mobile products — planning before I build, keeping things simple, and refining until it feels ",
-  },
-  { text: "right.", em: true },
+export const SENTENCE = "I design, build and ship web and mobile products end to end — from the database to the last pixel.";
+
+export const FACTS_LINE = "Antwerp, Belgium · Full-stack developer · Web, mobile & SaaS";
+
+export const PHASES = [
+  { name: "Plan", line: "Structure before code." },
+  { name: "Build", line: "Clean, typed, tested." },
+  { name: "Refine", line: "Until it feels right." },
 ];
 
-export const FACTS = [
-  { label: "Based", value: `${site.city}, Belgium` },
-  { label: "Role", value: "Full-stack Software Developer" },
-  { label: "Focus", value: "Web · Mobile · SaaS" },
-  { label: "Building since", value: site.buildingSince },
-];
-
-/** Shown in the cursor ring: a simple-icons path, or short text where no logo fits */
+/** Drawn on a plane: a simple-icons path, or short text where no logo fits */
 export interface Tech {
   name: string;
   icon?: string;
   glyph?: string;
 }
 
-export const CREDITS: { category: string; techs: Tech[] }[] = [
+export interface Layer {
+  name: string;
+  techs: Tech[];
+}
+
+/** Top → bottom of the stack */
+export const LAYERS: Layer[] = [
   {
-    category: "Frontend",
+    name: "Interface",
     techs: [
-      { name: "TypeScript", icon: siTypescript.path },
       { name: "React", icon: siReact.path },
       { name: "Next.js", icon: siNextdotjs.path },
+      { name: "TypeScript", icon: siTypescript.path },
+      { name: "React Native", icon: siReact.path },
     ],
   },
   {
-    category: "Backend",
+    name: "Logic",
     techs: [
       { name: "C#", glyph: "C#" },
       { name: "ASP.NET Core", icon: siDotnet.path },
@@ -54,27 +53,24 @@ export const CREDITS: { category: string; techs: Tech[] }[] = [
     ],
   },
   {
-    category: "Data",
+    name: "Intelligence",
+    techs: [
+      { name: "AI integration", glyph: "AI" },
+      { name: "n8n", icon: siN8n.path },
+    ],
+  },
+  {
+    name: "Data",
     techs: [
       { name: "SQL", glyph: "SQL" },
       { name: "MongoDB", icon: siMongodb.path },
     ],
   },
   {
-    category: "Mobile & AI",
-    techs: [
-      { name: "React Native", icon: siReact.path },
-      { name: "AI integration", glyph: "AI" },
-      { name: "n8n", icon: siN8n.path },
-    ],
-  },
-  {
-    category: "Tooling",
+    name: "Delivery",
     techs: [
       { name: "Git", icon: siGit.path },
-      { name: "CI/CD & deployment", glyph: "CI" },
+      { name: "CI/CD", glyph: "CI/CD" },
     ],
   },
 ];
-
-export const MARQUEE_PHRASE = "Web · Mobile · SaaS · Full-stack ·";

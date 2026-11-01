@@ -1,21 +1,22 @@
 /* ═══════════════════════════════════════════════════════════
-   About — scroll-lit statement → facts → stack as film credits
-   → velocity marquee (the transition into Contact)
-   Hidden start states are set in About.tsx, so the default here
-   is the final layout (no JS, reduced motion).
+   About — "The whole stack": copy + phase indicator on the left,
+   an exploded isometric stack with callouts on the right.
+   The CSS default is the story's final state (no JS, reduced motion).
+   [data-pinned] (set by About.tsx on desktop): sticky stage, scrubbed.
    ═══════════════════════════════════════════════════════════ */
 
-.about {
+.track {
   --muted: rgba(237, 235, 230, 0.6);
+  --plane-w: min(29vw, 47vh);
+  --plane-w: min(29vw, 47svh);
 
   position: relative;
   background: var(--stage-bg);
   color: var(--ink-white);
   font-family: var(--font-sans);
-  padding-top: clamp(120px, 22vh, 240px);
 }
 
-.about :focus-visible {
+.track :focus-visible {
   outline-color: var(--ink-white);
 }
 
@@ -31,172 +32,379 @@
   border: 0;
 }
 
-/* ── Statement ── */
-.statement {
-  max-width: 22em;
-  margin-inline: var(--grid-margin);
-  font-size: clamp(2.5rem, 4.2vw, 6rem);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-}
-
-.statement em {
-  font-style: italic;
-}
-
-/* ── Facts ── */
-.facts {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--grid-gap);
-  margin: clamp(96px, 16vh, 180px) var(--grid-margin) 0;
-}
-
-.fact {
+.stage {
   position: relative;
-  padding-top: 16px;
-}
-
-.rule {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: var(--hairline-dark);
-  transform-origin: left;
-}
-
-.factLabel {
-  font-family: var(--font-meta);
-  font-size: var(--text-meta);
-  color: var(--muted);
-}
-
-.factMask {
-  overflow: hidden;
-  margin-top: 12px;
-}
-
-.factValue {
-  display: block;
-  font-size: clamp(1.125rem, 1.7vw, 1.75rem);
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-}
-
-/* ── Credits ── */
-.credits {
-  margin: clamp(96px, 18vh, 200px) var(--grid-margin) 0;
-}
-
-/* The mask: `clip`, because focusing inside `overflow: hidden` could scroll the row */
-.row {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-  column-gap: clamp(24px, 3vw, 48px);
-  align-items: baseline;
-  padding-block: 10px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: clamp(80px, 12vh, 112px) var(--grid-margin) clamp(28px, 5vh, 48px);
   overflow: clip;
 }
 
-.row[data-revealed] {
-  overflow: visible;
+.track[data-pinned] {
+  height: 350vh; /* 2.5 screens of scrubbed scroll */
+  height: 350svh;
 }
 
-.category {
-  font-family: var(--font-meta);
-  font-size: var(--text-meta);
-  color: var(--muted);
-  text-align: right;
+.track[data-pinned] .stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
 }
 
-.techList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: clamp(1.5rem, 3vw, 3.25rem);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.025em;
-}
-
-.techItem {
-  display: inline;
-}
-
-.tech {
-  transition: opacity 0.3s linear;
-}
-
-.techList:has(.tech:focus-visible) .tech:not(:focus-visible) {
-  opacity: 0.4;
-}
-
-@media (hover: hover) {
-  .techList:has(.tech:hover) .tech:not(:hover) {
-    opacity: 0.4;
-  }
-}
-
-/* ── Marquee ── */
-.marquee {
-  margin-top: clamp(96px, 18vh, 200px);
-  padding-block: 0.1em 0.2em;
-  overflow: hidden;
-  font-size: 9vw;
-}
-
-.track {
-  display: flex;
-  width: max-content;
+.track[data-animating] :is(.rotX, .rotZ, .plane) {
   will-change: transform;
 }
 
-.phrase {
-  padding-right: 0.3em;
+/* ── Left: copy ── */
+.intro {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* "The whole stack." has to fit five columns on one line */
+.headline {
+  margin-top: 20px;
+  font-size: min(5.1vw, 10vh);
+  font-size: min(5.1vw, 10svh);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.headline em {
+  font-style: italic;
+}
+
+.sentence {
+  max-width: 26em;
+  margin-top: clamp(16px, 3vh, 28px);
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.phases {
+  margin-top: clamp(24px, 6vh, 56px);
+  display: grid;
+  row-gap: 4px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+}
+
+/* The final state; the story takes over from here */
+.phase {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  padding-block: 4px;
+  opacity: 0.3;
+}
+
+.phase:last-child {
+  opacity: 1;
+}
+
+.phaseLine {
+  position: relative;
+  width: 1px;
+  flex: none;
+}
+
+.phaseFill {
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform-origin: top;
+}
+
+.facts {
+  margin-top: auto;
+  padding-top: 20px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  color: var(--muted);
+}
+
+/* ── Right: the diagram ── */
+.diagram {
+  position: relative;
+  grid-column: 6 / 13;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(170px, 15vw, 240px);
+  column-gap: clamp(32px, 4vw, 64px);
+  min-width: 0;
+}
+
+.scene {
+  position: relative;
+  min-height: calc(var(--plane-w) * 1.2);
+  perspective: 1600px;
+}
+
+.rot {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.rotX {
+  transform: rotateX(58deg);
+}
+
+.rotZ {
+  transform: rotateZ(-38deg);
+}
+
+.plane {
+  position: absolute;
+  left: calc(50% - var(--plane-w) / 2);
+  top: calc(50% - var(--plane-w) * 0.3125);
+  width: var(--plane-w);
+  aspect-ratio: 16 / 10;
+  transform: translateZ(calc(var(--plane-w) * 0.16 * var(--depth)));
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.lift {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+}
+
+.track[data-ready] .lift {
+  pointer-events: auto;
+}
+
+.surface,
+.border,
+.outline {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+}
+
+.surface {
+  background: var(--stage-raised);
+  box-shadow: inset 0 0 calc(var(--plane-w) * 0.06) rgba(0, 0, 0, 0.35);
+}
+
+.border {
+  border: 1px solid rgba(237, 235, 230, 0.12);
+}
+
+/* The blueprint's line: 12% would barely show with no surface behind it */
+.outline {
+  border: 1px solid rgba(237, 235, 230, 0.45);
+  opacity: 0;
+}
+
+/* Along the front edge: the only part of the lower planes that the plane above doesn't cover */
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: calc(var(--plane-w) * 0.04) calc(var(--plane-w) * 0.05);
+}
+
+.engraved {
+  font-family: var(--font-meta);
+  font-size: calc(var(--plane-w) * 0.034);
+  line-height: 1;
+  color: rgba(237, 235, 230, 0.4);
+}
+
+.logos {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--plane-w) * 0.05);
+}
+
+.logo {
+  width: calc(var(--plane-w) * 0.08);
+  height: calc(var(--plane-w) * 0.08);
+  fill: var(--ink-white);
+  opacity: 0.7;
+}
+
+.glyph {
+  font-family: var(--font-meta);
+  font-size: calc(var(--plane-w) * 0.05);
+  line-height: 1;
+  color: var(--ink-white);
+  opacity: 0.7;
+}
+
+/* The plane's right-most corner on screen */
+.anchor {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ── Callouts ── */
+.leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.leader {
+  fill: none;
+  stroke: rgba(237, 235, 230, 0.3);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  transition: stroke var(--dur-fast) var(--ease-expo);
+}
+
+.leader[data-active] {
+  stroke: var(--ink-white);
+}
+
+.layers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(14px, 3vh, 28px);
+}
+
+.layerButton {
+  display: block;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  font-size: inherit;
+  pointer-events: none;
+}
+
+.track[data-ready] .layerButton {
+  pointer-events: auto;
+}
+
+.layerName {
+  display: block;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.4;
+  color: var(--muted);
+  transition: color var(--dur-fast) var(--ease-expo);
+}
+
+.layerTechs {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: rgba(237, 235, 230, 0.8);
+  transition: color var(--dur-fast) var(--ease-expo);
+}
+
+.techName {
   white-space: nowrap;
-  /* Variable fonts have overlapping contours, which a plain stroke draws as lines inside
-     the letters. A stage-coloured fill painted over a 2px stroke leaves a clean 1px outline. */
-  color: var(--stage-bg);
-  -webkit-text-stroke: 2px var(--ink-white);
-  paint-order: stroke fill;
+}
+
+.layerItem[data-active] :is(.layerName, .layerTechs) {
+  color: var(--ink-white);
 }
 
 .grain {
   position: absolute;
   inset: 0;
+  z-index: 3;
   background-image: var(--grain);
   background-size: 128px;
   opacity: 0.05;
   pointer-events: none;
 }
 
-/* ── Phones ── */
+/* ── Phones: copy, then the stack, then its labels ── */
 @media (max-width: 899px) {
-  .statement {
-    max-width: none;
-    font-size: 8vw;
+  .track {
+    --plane-w: min(72vw, 110vh);
+    --plane-w: min(72vw, 110svh);
+  }
+
+  .stage {
+    display: block;
+    padding-top: clamp(96px, 14vh, 128px);
+    padding-bottom: 64px;
+  }
+
+  .headline {
+    font-size: 11vw;
+  }
+
+  .phases {
+    display: grid;
+    margin-top: 24px;
+  }
+
+  /* A single line: the phases crossfade in the same spot */
+  .phase {
+    grid-area: 1 / 1;
+    opacity: 0;
+  }
+
+  .phaseLine {
+    display: none;
   }
 
   .facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 32px;
+    margin-top: 0;
+    padding-top: 12px;
   }
 
-  .row {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 6px;
-    padding-block: 14px;
+  .diagram {
+    display: block;
+    margin-top: 16px;
   }
 
-  .category {
-    text-align: left;
+  .leaders {
+    display: none;
   }
 
-  .marquee {
-    font-size: 12vw;
+  .scene {
+    min-height: calc(var(--plane-w) * 1.28);
   }
+
+  .layers {
+    gap: 18px;
+    margin-top: 8px;
+  }
+
+  .layerTechs {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Pinned, but its animation code hasn't arrived: an empty stage, not a half-built one */
+.track[data-pinned]:not([data-live]) .stage > * {
+  visibility: hidden;
 }

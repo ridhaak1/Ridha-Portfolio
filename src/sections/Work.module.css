@@ -226,6 +226,15 @@
   }
 }
 
+/* …except on its side: title and frame both have to fit the screen's height */
+@media (max-width: 899px) and (max-height: 500px) {
+  .track {
+    --title-size: 13vw;
+    --frame-w: min(92vw, (100vh - 96px) * 1.6);
+    --frame-w: min(92vw, (100svh - 96px) * 1.6);
+  }
+}
+
 /* ═══════════ Pinned (desktop, motion allowed) ═══════════ */
 .track[data-pinned] {
   --frame-w: min(52vw, (100vh - 330px) * 1.6);
@@ -342,4 +351,9 @@
   background: rgba(237, 235, 230, 0.6);
   transform: scaleX(0);
   transform-origin: left center;
+}
+
+/* Pinned, but its animation code hasn't arrived: an empty stage, not a half-built one */
+.track[data-pinned]:not([data-live]) .stage > * {
+  visibility: hidden;
 }

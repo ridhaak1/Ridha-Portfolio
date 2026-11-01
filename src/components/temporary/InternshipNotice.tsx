@@ -7,7 +7,9 @@
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { ScrollTrigger } from "@/motion/gsap";
 import { onIntroDone } from "@/motion/intro";
+import { afterIntro } from "@/motion/schedule";
 import { NOTICE_DELAY } from "@/motion/tokens";
 import styles from "./InternshipNotice.module.css";
 
@@ -23,6 +25,22 @@ function wasDismissed() {
 
 export default function InternshipNotice() {
   const [visible, setVisible] = useState(false);
+  const [atFooter, setAtFooter] = useState(false);
+
+  // Steps aside once About arrives, so it never covers that section, Contact or the footer
+  useEffect(
+    () =>
+      afterIntro(() => {
+        const trigger = ScrollTrigger.create({
+          trigger: "#about",
+          start: "top 60%",
+          onEnter: () => setAtFooter(true),
+          onLeaveBack: () => setAtFooter(false),
+        });
+        return () => trigger.kill();
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (wasDismissed()) return;
@@ -45,8 +63,10 @@ export default function InternshipNotice() {
     }
   };
 
+  const shown = visible && !atFooter;
+
   return (
-    <aside className={styles.notice} data-visible={visible || undefined} inert={!visible} aria-label="Internship log">
+    <aside className={styles.notice} data-visible={shown || undefined} inert={!shown} aria-label="Internship log">
       <Link to="/blog" className={styles.link}>
         Internship log — Deskdrive<span className={styles.detail}> (school project, NL)</span>{" "}
         <span className={styles.arrow} aria-hidden="true">↗</span>

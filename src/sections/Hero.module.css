@@ -33,7 +33,8 @@
   perspective: 1200px;
 }
 
-@media (max-width: 899px) {
+/* HERO_PORTRAIT in heroAssets.ts. A phone on its side keeps the wide crop. */
+@media (max-width: 899px) and (orientation: portrait) {
   .stage {
     --aspect: var(--aspect-m);
     --head-x: var(--head-x-m);
@@ -161,7 +162,7 @@
 }
 
 /* ── Mobile: portrait crop, name stacked RID / HA behind the subject ── */
-@media (max-width: 899px) {
+@media (max-width: 899px) and (orientation: portrait) {
   .scene {
     --name-size: 60cqw;
     --name-lift: 0.56;
@@ -177,6 +178,20 @@
     left: calc(var(--head-x) * 100%);
     translate: -50% 0;
     top: calc(var(--head-y) * 100% + var(--name-size) * 1.8 * (1 - var(--name-lift)) + 3cqw);
+  }
+}
+
+/* Tablets in portrait: the crop fills by width and runs tall, so the name would leave the top */
+@media (max-width: 899px) and (orientation: portrait) and (min-aspect-ratio: 3 / 5) {
+  .scene {
+    --name-size: 46cqw;
+  }
+}
+
+/* Phones on their side: only about 70% of the wide crop's height is on screen */
+@media (max-height: 500px) and (orientation: landscape) {
+  .scene {
+    --name-size: 20cqw;
   }
 }
 

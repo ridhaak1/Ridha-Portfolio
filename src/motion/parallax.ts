@@ -7,9 +7,16 @@ export type DepthLayer = [Element, number];
 /**
  * Mouse parallax + a tiny scene tilt (fine pointers). Each layer is lerped with
  * gsap.quickTo; `isActive` lets a section ignore the pointer while offscreen.
- * Returns a cleanup function.
+ * Returns a function that detaches the listener, with `.attach()` to put it back and `.reset()` to
+ * ease everything to rest. Reset through this rather than a separate tween, which can kill the
+ * quickTo tweens and leave the parallax dead.
  */
-export function createParallax(layers: DepthLayer[], scene: Element | null, isActive: () => boolean = () => true) {
+export function createParallax(
+  layers: DepthLayer[],
+  scene: Element | null,
+  isActive: () => boolean = () => true,
+  tilt: number = PARALLAX.tilt,
+) {
   const opts = { duration: PARALLAX.duration, ease: "power3.out" };
   const moves = layers.map(([el, amount]) => ({
     x: gsap.quickTo(el, "x", opts),
@@ -27,12 +34,22 @@ export function createParallax(layers: DepthLayer[], scene: Element | null, isAc
       m.x(nx * m.amount);
       m.y(ny * m.amount * 0.6);
     });
-    tiltY?.(nx * PARALLAX.tilt);
-    tiltX?.(-ny * PARALLAX.tilt);
+    tiltY?.(nx * tilt);
+    tiltX?.(-ny * tilt);
   };
 
-  window.addEventListener("pointermove", onMove, { passive: true });
-  return () => window.removeEventListener("pointermove", onMove);
+  const attach = () => window.addEventListener("pointermove", onMove, { passive: true });
+  const detach = () => window.removeEventListener("pointermove", onMove);
+  attach();
+  const reset = () => {
+    moves.forEach((m) => {
+      m.x(0);
+      m.y(0);
+    });
+    tiltY?.(0);
+    tiltX?.(0);
+  };
+  return Object.assign(detach, { attach, reset });
 }
 
 /** Touch devices: a slow autonomous float instead of parallax (one tween per layer) */

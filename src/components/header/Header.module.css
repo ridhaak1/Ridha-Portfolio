@@ -106,16 +106,6 @@
   color: var(--color-text);
 }
 
-.indicator {
-  position: absolute;
-  left: 14px;
-  right: 16.5px; /* compensates for the trailing letter-spacing */
-  bottom: 6px;
-  height: 1.5px;
-  background: var(--color-accent);
-  box-shadow: 0 0 8px rgba(245, 166, 35, 0.6);
-}
-
 .blogItem {
   margin-left: 12px;
   padding-left: 18px;
@@ -301,11 +291,7 @@
     padding: 0 11px;
   }
 
-  .indicator {
-    left: 11px;
-    right: 13.5px;
   }
-}
 
 @media (max-width: 900px) {
   .inner {
@@ -351,5 +337,30 @@
 
   .liveDot {
     animation: none;
+  }
+}
+
+/* Menu entrance: pure CSS, and instant for anyone who prefers no motion */
+@media (prefers-reduced-motion: no-preference) {
+  .menu {
+    animation: menuIn 0.3s linear;
+  }
+
+  .menuList > li {
+    animation: menuItemIn 0.55s var(--ease-spring) both;
+    animation-delay: calc(0.08s + var(--i) * 0.06s);
+  }
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes menuItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
   }
 }

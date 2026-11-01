@@ -1,259 +1,472 @@
-/* ── Section ─────────────────────────────────────────────── */
-.contact {
+/* ═══════════════════════════════════════════════════════════
+   Contact — a flight through giant greetings toward the hero's
+   café, stopping at the arrival plane.
+   Default: no corridor, just the plane (no JS, reduced motion).
+   [data-pinned] (Contact.tsx, desktop): sticky stage, scrubbed.
+   [data-flying] (Contact.tsx, phones): plays once on enter.
+   ═══════════════════════════════════════════════════════════ */
+
+.track {
+  /* 7:1 at the plate's brightest pixel, not just on the bare stage */
+  --muted: rgba(237, 235, 230, 0.74);
+
   position: relative;
-  background: #07090d;
-  color: #f0ede8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  padding: 80px 20px 48px;
+  background: var(--stage-bg);
+  color: var(--ink-white);
+  font-family: var(--font-sans);
 }
 
-/* Background glow blob */
-.bgGlow {
+.track :focus-visible {
+  outline-color: var(--ink-white);
+}
+
+.srOnly {
   position: absolute;
-  top: -120px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(
-    circle,
-    rgba(245, 166, 35, 0.07) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* Subtle dot grid */
-.bgGrid {
+.navAnchor {
+  position: absolute;
+  top: 0;
+}
+
+.track[data-pinned] .navAnchor {
+  top: calc((100% - 100vh) * var(--arrive));
+  top: calc((100% - 100svh) * var(--arrive));
+}
+
+.stage {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: clip;
+  display: flex;
+}
+
+.track[data-pinned] {
+  height: 400vh; /* 3 screens of flight */
+  height: 400svh;
+}
+
+.track[data-pinned] .stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+
+/* ── The corridor ── */
+.scene {
+  display: none;
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.04) 1px,
-    transparent 1px
-  );
-  background-size: 40px 40px;
+  overflow: clip;
+  perspective: 1000px;
   pointer-events: none;
 }
 
-/* ── Inner ───────────────────────────────────────────────── */
-.inner {
+.track:is([data-pinned], [data-flying]) .scene {
+  display: block;
+}
+
+.steer,
+.world {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.track[data-animating] :is(.steer, .world) {
+  will-change: transform;
+}
+
+/* Far behind the last word. Blur is in the plate's own pixels, and the plate ends up at 0.56x,
+   so this reads as about 30px on arrival. Sized to cover the frame from that distance. */
+.plate {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(200vw, 320vh);
+  aspect-ratio: 1.6;
+  transform: translate3d(-50%, -50%, -5000px);
+  filter: blur(54px) brightness(0.4);
+}
+
+.plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+/* Hairline frames along the depth axis: what makes the black read as a space being flown through */
+.gate {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150vw;
+  height: 150vh;
+  transform: translate3d(-50%, -50%, var(--z));
+  transform-style: preserve-3d;
+}
+
+/* Four solid strips, not a border: a 1px border on a layer rasterized at a small scale loses
+   whole edges, while a solid strip is drawn at its true geometry at any distance */
+.gate i {
+  position: absolute;
+  background: var(--ink-white);
+  opacity: var(--gate-opacity, 0);
+  transform: translateZ(0);
+}
+
+.gate i:nth-child(1),
+.gate i:nth-child(2) {
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.gate i:nth-child(3),
+.gate i:nth-child(4) {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+
+.gate i:nth-child(1) {
+  top: 0;
+}
+
+.gate i:nth-child(2) {
+  bottom: 0;
+}
+
+.gate i:nth-child(3) {
+  left: 0;
+}
+
+.gate i:nth-child(4) {
+  right: 0;
+}
+
+/* The four long edges of the corridor, running from the first frame's corners to the plate */
+.rail {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4800px;
+  height: 1px;
+  background: var(--ink-white);
+  opacity: 0.1;
+  transform-origin: left center;
+}
+
+.tl {
+  transform: translate3d(-75vw, -75vh, -300px) rotateY(90deg);
+}
+
+.tr {
+  transform: translate3d(75vw, -75vh, -300px) rotateY(90deg);
+}
+
+.bl {
+  transform: translate3d(-75vw, 75vh, -300px) rotateY(90deg);
+}
+
+.br {
+  transform: translate3d(75vw, 75vh, -300px) rotateY(90deg);
+}
+
+.word {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  font-size: var(--size);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  transform: translate3d(calc(-50% + var(--x)), calc(-50% + var(--y)), var(--z));
+}
+
+/* Negative tracking would pull Arabic's connected letters apart */
+.word[lang="ar"] {
+  font-family: "IBM Plex Sans Arabic", var(--font-sans);
+  letter-spacing: 0;
+}
+
+.wordInner {
+  display: block;
+}
+
+.counter {
+  display: none;
+  position: absolute;
+  left: var(--grid-margin);
+  bottom: clamp(24px, 4vh, 40px);
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+}
+
+.track[data-pinned] .counter {
+  display: block;
+}
+
+.counter bdi {
+  font-family: "IBM Plex Sans Arabic", var(--font-meta);
+}
+
+.counterLanguage {
+  margin-left: 16px;
+  color: var(--muted);
+}
+
+/* ── The arrival plane ── */
+.plane {
   position: relative;
   z-index: 1;
-  max-width: 960px;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 28px;
-  text-align: center;
+  /* A lower-third title card: everything together, with the café's light above it */
+  justify-content: flex-end;
+  padding: clamp(88px, 13vh, 128px) var(--grid-margin) clamp(24px, 4vh, 40px);
 }
 
-/* ── Badge ───────────────────────────────────────────────── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border: 1px solid rgba(245, 166, 35, 0.25);
-  background: rgba(245, 166, 35, 0.06);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #f5a623;
+.track[data-pinned] .plane {
+  pointer-events: none;
 }
 
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #f5a623;
-  box-shadow: 0 0 8px rgba(245, 166, 35, 0.8);
-  animation: pulse 2s ease-in-out infinite;
+.track[data-pinned][data-arrived] .plane {
+  pointer-events: auto;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
+/* The fallback's only sight of the greetings */
+.greetingLine {
+  margin-bottom: 24px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  color: var(--muted);
 }
 
-/* ── Headline ────────────────────────────────────────────── */
-.headline {
-  font-size: clamp(42px, 7vw, 80px);
-  font-family: "Bebas Neue", sans-serif;
-  line-height: 1.05;
-  letter-spacing: 2px;
-  margin-top: 4px;
+.greetingLine bdi[lang="ar"] {
+  font-family: "IBM Plex Sans Arabic", var(--font-meta);
 }
 
-.headline span {
-  background: linear-gradient(90deg, #f5a623, #ffcd6b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.track:is([data-pinned], [data-flying]) .greetingLine {
+  display: none;
 }
 
-/* ── Description ─────────────────────────────────────────── */
-.desc {
-  font-size: 16px;
-  line-height: 1.75;
-  color: rgba(240, 237, 232, 0.55);
-  max-width: 520px;
+.label {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  color: var(--muted);
 }
 
-/* ── Contact Grid ────────────────────────────────────────── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  width: 100%;
+.headlineMask {
   margin-top: 12px;
+  padding-bottom: 0.08em;
+  overflow: clip;
+  font-size: 9vw;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
-@media (max-width: 860px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+.headline {
+  display: block;
 }
 
-@media (max-width: 480px) {
-  .grid { grid-template-columns: 1fr; }
+.sub {
+  margin-top: clamp(12px, 2vh, 20px);
+  font-size: clamp(1rem, 1.35vw, 1.375rem);
+  line-height: 1.4;
+  color: var(--muted);
 }
 
-/* ── Card ────────────────────────────────────────────────── */
-.card {
+.reach {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 22px 20px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
-  text-align: left;
-  text-decoration: none;
-  color: #f0ede8;
-  transition: background 0.3s, border-color 0.3s, transform 0.3s;
-  cursor: pointer;
-}
-
-.card:hover {
-  background: rgba(245, 166, 35, 0.06);
-  border-color: rgba(245, 166, 35, 0.3);
-  transform: translateY(-4px);
-}
-
-.card:hover .iconWrap {
-  background: rgba(245, 166, 35, 0.15);
-  color: #f5a623;
-}
-
-.card:hover .arrow {
-  opacity: 1;
-  color: #f5a623;
-}
-
-.cardTop {
-  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 4px;
+  column-gap: clamp(32px, 4vw, 64px);
+  row-gap: 16px;
+  margin-top: clamp(32px, 6vh, 64px);
 }
 
-.iconWrap {
+/* ── Email: rolling letters ── */
+.email {
+  position: relative;
+  display: inline-block;
+  padding: 0 0 0.14em;
+  color: inherit;
+  font-size: 3.2vw;
+  font-weight: 700;
+  font-kerning: none;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(237, 235, 230, 0.3);
+}
+
+/* One character's window; its stack holds two copies and rolls up by one */
+.roll {
+  display: inline-block;
+  height: 1.25em;
+  overflow: clip;
+  vertical-align: top;
+}
+
+.rollStack {
+  display: block;
+}
+
+.rollStack > span {
+  display: block;
+  height: 1.25em;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--ink-white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.email:focus-visible .underline {
+  transform: scaleX(1);
+}
+
+@media (hover: hover) {
+  .email:hover .underline {
+    transform: scaleX(1);
+  }
+}
+
+/* ── Links ── */
+.links {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  font-size: 18px;
-  transition: background 0.3s, color 0.3s;
+  flex-wrap: wrap;
+  column-gap: clamp(16px, 2vw, 28px);
+  row-gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5em;
+}
+
+.link {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .arrow {
-  font-size: 16px;
-  opacity: 0.3;
-  transition: opacity 0.3s, color 0.3s;
-}
-
-.cardLabel {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(240, 237, 232, 0.4);
-}
-
-.cardValue {
-  font-size: 13px;
-  font-weight: 500;
-  color: #f0ede8;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.cardDesc {
-  font-size: 12px;
-  color: rgba(240, 237, 232, 0.35);
-}
-
-/* ── Primary CTA ─────────────────────────────────────────── */
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
-  background: #f5a623;
-  color: #07090d;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-  margin-top: 8px;
-}
-
-.cta:hover {
-  background: #ffcd6b;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(245, 166, 35, 0.35);
-}
-
-.ctaArrow {
-  font-size: 15px;
-  transition: transform 0.3s;
-}
-
-.cta:hover .ctaArrow {
-  transform: translate(2px, -2px);
-}
-
-/* ── Signature ───────────────────────────────────────────── */
-.signature {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 24px;
-  font-size: 12px;
-  color: rgba(240, 237, 232, 0.3);
-}
-
-.sigBrand {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 15px;
-  letter-spacing: 1px;
-  color: rgba(240, 237, 232, 0.5);
-}
-
-.divider {
   display: inline-block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(240, 237, 232, 0.2);
+  transition: transform var(--dur-fast) var(--ease-expo);
+}
+
+.link:focus-visible .arrow {
+  transform: translate(3px, -3px);
+}
+
+@media (hover: hover) {
+  .link:hover .arrow {
+    transform: translate(3px, -3px);
+  }
+}
+
+.status {
+  margin-top: clamp(20px, 3.5vh, 36px);
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Copy confirmation ── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: var(--z-header);
+  padding: 8px 12px;
+  background: var(--stage-bg);
+  border: 1px solid var(--hairline-dark);
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-expo),
+    transform var(--dur-fast) var(--ease-expo);
+}
+
+.toast[data-visible] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background-image: var(--grain);
+  background-size: 128px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .underline,
+  .arrow,
+  .toast {
+    transition: opacity var(--dur-fast) linear;
+  }
+
+  .toast,
+  .toast[data-visible] {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Phones ── */
+@media (max-width: 899px) {
+  .word:not([data-phone]),
+  .gate:nth-of-type(2n + 1) {
+    display: none;
+  }
+
+  .headlineMask {
+    font-size: min(17vw, 28vh);
+    font-size: min(17vw, 28svh);
+  }
+
+  /* 11.4em wide: one line that fits the grid */
+  .email {
+    font-size: 6.6vw;
+  }
+
+}
+
+/* Pinned, but its animation code hasn't arrived: an empty stage, not a half-built one */
+.track[data-pinned]:not([data-live]) .stage > * {
+  visibility: hidden;
 }

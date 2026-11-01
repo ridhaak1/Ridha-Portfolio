@@ -2,12 +2,12 @@ import type { MouseEvent } from "react";
 import { site } from "@/config/site";
 import { sectionHref, type SectionId } from "@/data/navigation";
 import { useActiveSection } from "@/hooks/useActiveSection";
-import { scrollToElement } from "@/motion/lenis";
+import { scrollToElement, sectionEntry } from "@/motion/lenis";
 import LocalTime from "@/components/hero/LocalTime";
 import styles from "./TopHud.module.css";
 
 const LINKS: { id: SectionId; label: string }[] = [
-  { id: "projects", label: "Work" },
+  { id: "work", label: "Work" },
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ];
@@ -17,7 +17,7 @@ function onSectionClick(e: MouseEvent<HTMLAnchorElement>, id: SectionId) {
   const target = document.getElementById(id);
   if (!target || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
   e.preventDefault();
-  scrollToElement(target);
+  scrollToElement(sectionEntry(target));
   // Move keyboard focus along with the scroll
   if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
   target.focus({ preventScroll: true });

@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, type ComponentPropsWithoutRef } from "react";
 import { site } from "@/config/site";
 
 // en-GB gives "CET"/"CEST" rather than "GMT+1"
@@ -44,21 +44,23 @@ const FILL_NOW = `(function(){try{var o={};new Intl.DateTimeFormat("en-GB",${JSO
   timeZoneName: "short",
 })}).formatToParts(new Date()).forEach(function(p){o[p.type]=p.value});document.currentScript.previousElementSibling.textContent=o.hour+":"+o.minute+" "+o.timeZoneName}catch(e){}})()`;
 
-interface LocalTimeProps {
-  className?: string;
+interface LocalTimeProps extends ComponentPropsWithoutRef<"p"> {
   separator?: string;
+  /** Shown before the time; the city by default */
+  place?: string;
 }
 
-export default function LocalTime({ className, separator = " — " }: LocalTimeProps) {
+export default function LocalTime({ separator = " — ", place = site.city, children, ...props }: LocalTimeProps) {
   // Unknown at prerender time: the static HTML gets a placeholder that FILL_NOW replaces
   const time = useSyncExternalStore(subscribe, formatNow, () => "--:--");
 
   return (
-    <p className={className}>
-      {site.city}
+    <p {...props}>
+      {place}
       {separator}
       <time suppressHydrationWarning>{time}</time>
       <script dangerouslySetInnerHTML={{ __html: FILL_NOW }} />
+      {children}
     </p>
   );
 }

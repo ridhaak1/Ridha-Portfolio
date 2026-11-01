@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════════════════════════
+   Project drawer — the clicked frame grows into this panel,
+   and the content rises through masks. Same stage as the page.
+   ═══════════════════════════════════════════════════════════ */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) + 10);
+  color: var(--ink-white);
+  font-family: var(--font-sans);
+}
+
+.root :focus-visible {
+  outline-color: var(--ink-white);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 11, 9, 0.8);
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(56vw, 920px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--stage-bg);
+  border-left: 1px solid var(--hairline-dark);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+  background-image: var(--grain);
+  background-size: 128px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px var(--grid-margin);
+}
+
+.close {
+  padding: 4px 0;
+  color: inherit;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+}
+
+.close:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.content {
+  position: relative;
+  padding: 8px var(--grid-margin) clamp(40px, 8vh, 72px);
+}
+
+/* The mask: `clip`, because focusing inside `overflow: hidden` could scroll it */
+.mask {
+  overflow: clip;
+}
+
+.panel[data-revealed] .mask {
+  overflow: visible;
+}
+
+.title {
+  padding-bottom: 0.08em;
+  font-size: clamp(2.5rem, 5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.meta {
+  margin-top: 12px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  color: rgba(237, 235, 230, 0.7);
+}
+
+.description {
+  max-width: 34em;
+  margin-top: clamp(20px, 3vh, 28px);
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  line-height: 1.5;
+  color: rgba(237, 235, 230, 0.8);
+}
+
+.gallery {
+  display: grid;
+  row-gap: var(--grid-gap);
+  margin-top: clamp(24px, 4vh, 40px);
+  list-style: none;
+}
+
+.shot {
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: clamp(20px, 3vw, 36px);
+  row-gap: 8px;
+  margin-top: clamp(24px, 4vh, 36px);
+  list-style: none;
+}
+
+.link {
+  display: inline-block;
+  padding-block: 4px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+}
+
+.link span[aria-hidden] {
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease-expo);
+}
+
+.link:focus-visible span[aria-hidden] {
+  transform: translate(3px, -3px);
+}
+
+@media (hover: hover) {
+  .link:hover span[aria-hidden] {
+    transform: translate(3px, -3px);
+  }
+}
+
+/* The screenshot in flight, above the panel's clipping */
+.flyer {
+  position: fixed;
+  display: none;
+  max-width: none;
+  object-fit: cover;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+@media (max-width: 899px) {
+  .panel {
+    width: 100%;
+    border-left: 0;
+  }
+}

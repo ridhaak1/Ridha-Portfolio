@@ -8,14 +8,6 @@ const STORAGE_KEY = "intro-played";
 let done = false;
 const listeners = new Set<() => void>();
 
-export function introAlreadyPlayed(): boolean {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
 export function markIntroDone() {
   done = true;
   try {

@@ -1,18 +1,14 @@
 import { useCallback, useRef, useState, type FocusEvent } from "react";
-import { Link, NavLink, useLocation } from "react-router";
-import { motion, MotionConfig } from "framer-motion";
-import { BLOG_LINK, SECTION_IDS, SECTION_LINKS, sectionHref } from "@/data/navigation";
+import { Link, NavLink } from "react-router";
+import { BLOG_LINK, SECTION_LINKS, sectionHref } from "@/data/navigation";
 import { useHeaderScroll } from "@/hooks/useHeaderScroll";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import MobileMenu from "./MobileMenu";
 import styles from "./Header.module.css";
 
 const MENU_ID = "mobile-menu";
 
 export default function Header() {
-  const { pathname } = useLocation();
   const { scrolled, hidden } = useHeaderScroll();
-  const activeSection = useActiveSection(SECTION_IDS, pathname === "/");
   const [menuOpen, setMenuOpen] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -27,7 +23,7 @@ export default function Header() {
   };
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <header
         className={styles.header}
         data-scrolled={scrolled || undefined}
@@ -44,28 +40,13 @@ export default function Header() {
 
           <nav className={styles.nav} aria-label="Main">
             <ul className={styles.list}>
-              {SECTION_LINKS.map(({ id, label }) => {
-                const isActive = activeSection === id;
-                return (
-                  <li key={id}>
-                    <Link
-                      to={sectionHref(id)}
-                      className={styles.link}
-                      aria-current={isActive ? "location" : undefined}
-                    >
-                      {label}
-                      {isActive && (
-                        <motion.span
-                          layoutId="nav-indicator"
-                          className={styles.indicator}
-                          transition={{ type: "spring", stiffness: 420, damping: 38 }}
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
+              {SECTION_LINKS.map(({ id, label }) => (
+                <li key={id}>
+                  <Link to={sectionHref(id)} className={styles.link}>
+                    {label}
+                  </Link>
+                </li>
+              ))}
               <li className={styles.blogItem}>
                 <NavLink to={BLOG_LINK.to} className={styles.blogLink}>
                   <span className={styles.liveDot} aria-hidden="true" />
@@ -95,8 +76,7 @@ export default function Header() {
         open={menuOpen}
         onClose={closeMenu}
         toggleRef={toggleRef}
-        activeSection={activeSection}
       />
-    </MotionConfig>
+    </>
   );
 }

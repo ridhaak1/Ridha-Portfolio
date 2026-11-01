@@ -33,10 +33,21 @@ PROJECTS = {
     "reviewnest": ("reviewnest.png", (0.16, 0.26, 0.58), 0.5),  # navy
 }
 
-# Screenshot clean-up: boxes (source px) painted out with the surrounding background,
-# e.g. the framework dev-tools button captured in the bottom-left of the Ajib screenshot
+# Screenshot clean-up, in source px. The originals stay untouched.
+# Boxes are painted out with the surrounding background: the framework dev-tools button and the
+# "Join +2,000 students" row in Ajib, the account email in MyShop's logout button
 CLEANUP = {
-    "ajib": [(24, 1444, 126, 1544)],
+    "ajib": [(24, 1444, 126, 1544), (118, 1200, 722, 1298)],
+    "admin-panel": [(2440, 60, 2612, 92)],
+}
+# MyShop: the word that's left, recentred on its button: source box, new left edge
+MOVE = {
+    "admin-panel": [((2350, 60, 2438, 92), 2439)],
+}
+# ReviewNest: the "500+ businesses" stat goes and the other two close the gap, so the row still
+# starts at the margin. The background has a grid and a soft glow, so a flat fill would show.
+STAT_ROW = {
+    "reviewnest": {"box": (318, 1276, 1020, 1372), "keep_from": 580, "to": 327, "grid_dy": 96},
 }
 
 
@@ -54,6 +65,36 @@ def clean(img: Image.Image, boxes) -> Image.Image:
         ])
         out.paste(tuple(int(v) for v in np.median(ring, axis=0)), (x0, y0, x1, y1))
     return out
+
+
+def move(img: Image.Image, moves, fill_from) -> Image.Image:
+    """Lifts a box of text off a flat button and puts it back further along."""
+    out = img.copy()
+    for (x0, y0, x1, y1), to in moves:
+        piece = img.crop((x0, y0, x1, y1))
+        out.paste(tuple(int(v) for v in np.median(np.asarray(fill_from.crop((x1 + 2, y0, x1 + 40, y0 + 2))).reshape(-1, 3), axis=0)), (x0, y0, x1, y1))
+        out.paste(piece, (to, y0))
+    return out
+
+
+def close_stat_row(img: Image.Image, box, keep_from, to, grid_dy) -> Image.Image:
+    """
+    Rebuilds a row of stats without its first one. The clean background comes from the same area one
+    grid repeat lower, so the grid lines carry on; the kept text is what differs from that background.
+    """
+    a = np.asarray(img, dtype=np.float64).copy()
+    x0, y0, x1, y1 = box
+    row = a[y0:y1, x0:x1].copy()
+    clean_bg = a[y0 + grid_dy:y1 + grid_dy, x0:x1].copy()
+    text = row - clean_bg
+    alpha = np.clip((np.abs(text).max(axis=2, keepdims=True) - 8) / 12, 0, 1)
+    a[y0:y1, x0:x1] = clean_bg
+    kept_x, target_x = keep_from - x0, to - x0
+    width = x1 - keep_from
+    placed = a[y0:y1, x0 + target_x:x0 + target_x + width]
+    a[y0:y1, x0 + target_x:x0 + target_x + width] = placed + text[:, kept_x:kept_x + width] * alpha[:, kept_x:kept_x + width]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
 
 FRAME_ASPECT = 16 / 10
 FRAME_WIDTHS = (800, 1600)
@@ -110,7 +151,12 @@ def main():
 
     meta = {}
     for pid, (file, tint, anchor) in PROJECTS.items():
-        img = clean(Image.open(IMAGES / file).convert("RGB"), CLEANUP.get(pid, []))
+        source = Image.open(IMAGES / file).convert("RGB")
+        img = clean(source, CLEANUP.get(pid, []))
+        if pid in MOVE:
+            img = move(img, MOVE[pid], source)
+        if pid in STAT_ROW:
+            img = close_stat_row(img, **STAT_ROW[pid])
         framed = frame_crop(img, anchor)
         widths = [w for w in FRAME_WIDTHS if w <= framed.width] or [framed.width]
         for i, w in enumerate(widths):

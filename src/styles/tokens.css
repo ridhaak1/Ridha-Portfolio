@@ -2,7 +2,7 @@
    Design Tokens — Global CSS Variables
    ═══════════════════════════════════════════════════════════ */
 
-/* Google Fonts for these legacy tokens are loaded non-blocking from root.tsx */
+/* Their fonts are self-hosted: see fonts.css */
 
 :root {
   /* Colors */
@@ -13,7 +13,6 @@
   --color-text-muted: rgba(240, 237, 232, 0.42);
   --color-text-faint: rgba(240, 237, 232, 0.18);
   --color-border: rgba(255, 255, 255, 0.07);
-  --color-glow: rgba(245, 166, 35, 0.06);
 
   /* Typography */
   --font-display: "Bebas Neue", sans-serif;
@@ -22,18 +21,11 @@
 
   /* Easing */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Layout */
   --header-h: 72px;
 
   /* Z-index scale */
-  --z-bg: 0;
-  --z-overlay: 1;
-  --z-float: 2;
-  --z-content: 10;
-  --z-ui: 15;
-  --z-top: 20;
   --z-menu: 90;
   --z-header: 100;
 }

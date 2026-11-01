@@ -1,8 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
-   Design system — editorial light
+   Design system — tokens for the dark warm stage
 
-   New names on purpose: the old dark tokens in tokens.css stay
-   in place for sections that haven't been redesigned yet.
+   The old tokens in tokens.css remain for the blog's styles.
    Motion values are mirrored in src/motion/tokens.ts.
    ═══════════════════════════════════════════════════════════ */
 
@@ -16,6 +15,7 @@
 
   /* On photography / dark grounds */
   --stage-bg: #0d0b09;
+  --stage-raised: #191512; /* stage + 4% lightness */
   --ink-white: #edebe6;
   --hairline-dark: rgba(237, 235, 230, 0.16);
 
@@ -23,16 +23,9 @@
   --font-sans: "Switzer", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-meta: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* "Ridha builds software" is ~9em wide; 7.9vw keeps it inside 10 of 12 columns */
-  --text-display: clamp(2.5rem, 7.9vw, 8rem);
-  --text-body: 1rem;
   --text-meta: 0.75rem; /* 12px */
 
-  --tracking-display: -0.04em;
-  --leading-display: 0.94;
 
-  --weight-display: 500;
-  --weight-display-active: 640;
 
   /* Grid */
   --grid-max: 1440px;
@@ -44,7 +37,6 @@
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 0.6s;
   --dur-base: 0.9s;
-  --dur-slow: 1.2s;
 }
 
 /* Home intro timeline (pure CSS, plays from first paint): hero + global HUD. ≈2s */

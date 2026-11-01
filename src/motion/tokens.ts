@@ -31,15 +31,43 @@ export const FADE = { duration: 0.4 } as const;
 /** Internship notice appears this long after the intro finishes */
 export const NOTICE_DELAY = 2;
 
-/** Scroll-lit text: words go from `dim` to full opacity across the scrub range */
-export const SCROLL_LIT = { dim: 0.18, start: "top 85%", end: "bottom 35%", stagger: 0.4 } as const;
+/** Isometric stack: gap (share of plane width) and tight gap (px), hover lift and dimming, mouse
+ * tilt (deg), and the still hold after phase 3 (share of the story, so hover has time to matter) */
+export const STACK = { gap: 0.16, tightGap: 8, lift: 36, dim: 0.35, tilt: 4, hold: 0.12 } as const;
 
-/** Velocity marquee. Speeds are % of the track per second; velocity is Lenis' px per frame. */
-export const MARQUEE = {
-  baseSpeed: 0.7,
-  boostPerVelocity: 0.25,
-  maxBoost: 12,
-  skewPerVelocity: 0.3,
-  maxSkew: 8,
-  skewEase: 0.5,
+/**
+ * Contact's 3D corridor, all z in px. Mirrors `perspective` in Contact.module.css.
+ * passAt → goneAt is the range where a word fades, scales and blurs past the camera.
+ */
+export const CORRIDOR = {
+  perspective: 1000,
+  travel: 4200,
+  nearZ: -600,
+  farZ: -4000,
+  planeZ: -4200,
+  passAt: -300,
+  goneAt: 150,
+  blur: 6,
+  passScale: 1.3,
+  farOpacity: 0.15,
+  plateStart: 1,
+  plateEnd: 0.45,
+  /** Hairline frames along the corridor: how many, from where to where (the deepest ones are
+   *  behind the plate, still showing on arrival), how bright up close */
+  gateCount: 11,
+  gateNear: -350,
+  gateFar: -6800,
+  gateOpacity: 0.32,
+  /** The plane fades in over this stretch of the approach */
+  planeFrom: -900,
+  planeTo: -100,
+  /** Still hold after arriving, as a share of the flight */
+  hold: 0.14,
+  /** Mouse steering: px at the viewport edge, degrees */
+  steer: 40,
+  tilt: 3,
+  /** Max pull of the email line, px */
+  magnetic: 10,
+  /** Phones: seconds to play the flight */
+  autoplay: 2.5,
 } as const;

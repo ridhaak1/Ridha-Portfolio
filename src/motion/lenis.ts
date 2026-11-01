@@ -17,7 +17,8 @@ export function useLenis() {
   useEffect(() => {
     if (matches(REDUCED_MOTION)) return;
 
-    const lenis = new Lenis({ autoRaf: false });
+    // syncTouch stays off: touch scrolling is native, so iOS keeps its own momentum and address bar
+    const lenis = new Lenis({ autoRaf: false, syncTouch: false });
     instance = lenis;
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -32,6 +33,31 @@ export function useLenis() {
       if (instance === lenis) instance = null;
     };
   }, []);
+}
+
+/** Back to the very top: slow with Lenis, native otherwise */
+export function scrollToTop() {
+  if (instance) instance.scrollTo(0, { duration: 1.6 });
+  else window.scrollTo({ top: 0, behavior: matches(REDUCED_MOTION) ? "auto" : "smooth" });
+}
+
+/** Where a section is entered: a pinned section can name a [data-nav-anchor] instead of its first frame */
+export const sectionEntry = (section: HTMLElement) =>
+  section.querySelector<HTMLElement>("[data-nav-anchor]") ?? section;
+
+/** Jumps straight to a section's entry, with no scroll animation */
+export function jumpToSection(section: HTMLElement) {
+  jumpToY(sectionEntry(section).getBoundingClientRect().top + window.scrollY);
+}
+
+/** Jumps straight to a scroll position, with no scroll animation */
+export function jumpToY(y: number) {
+  if (instance) {
+    instance.resize();
+    instance.scrollTo(y, { immediate: true, force: true });
+  } else {
+    window.scrollTo({ top: y, behavior: "instant" });
+  }
 }
 
 /** Scrolls to an element with Lenis when it's running, natively otherwise */

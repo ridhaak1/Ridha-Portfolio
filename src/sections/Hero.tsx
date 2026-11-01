@@ -6,8 +6,9 @@ import { gsap, ScrollTrigger } from "@/motion/gsap";
 import { markIntroDone } from "@/motion/intro";
 import { FINE_POINTER, matches, MOBILE, REDUCED_MOTION } from "@/motion/media";
 import { createFloat, createParallax, type DepthLayer } from "@/motion/parallax";
+import { afterIntro } from "@/motion/schedule";
 import { FLOAT, PARALLAX } from "@/motion/tokens";
-import { fallbackSrc, grainUrl, heroMeta, MOBILE_MEDIA, SIZES, srcSet } from "./heroAssets";
+import { fallbackSrc, grainUrl, heroMeta, HERO_PORTRAIT, SIZES, srcSet } from "./heroAssets";
 import styles from "./Hero.module.css";
 
 const { desktop, mobile } = heroMeta;
@@ -27,8 +28,8 @@ function Layer({ layer, alt, priority }: { layer: "plate" | "cutout"; alt: strin
   const w = Math.round(desktop.widths[0]);
   return (
     <picture>
-      <source media={MOBILE_MEDIA} type="image/avif" srcSet={srcSet(layer, "mobile", "avif")} sizes={SIZES.mobile} />
-      <source media={MOBILE_MEDIA} type="image/webp" srcSet={srcSet(layer, "mobile", "webp")} sizes={SIZES.mobile} />
+      <source media={HERO_PORTRAIT} type="image/avif" srcSet={srcSet(layer, "mobile", "avif")} sizes={SIZES.mobile} />
+      <source media={HERO_PORTRAIT} type="image/webp" srcSet={srcSet(layer, "mobile", "webp")} sizes={SIZES.mobile} />
       <source type="image/avif" srcSet={srcSet(layer, "desktop", "avif")} sizes={SIZES.desktop} />
       <source type="image/webp" srcSet={srcSet(layer, "desktop", "webp")} sizes={SIZES.desktop} />
       <img
@@ -63,59 +64,73 @@ export default function Hero() {
     if (mode === "intro") {
       const claim = q("[data-claim]")[0];
       const done = () => markIntroDone();
-      claim?.addEventListener("animationend", done, { once: true });
-      introTimer = setTimeout(done, 3500); // safety net (e.g. animations disabled)
+      // On a slow device the CSS intro can finish before the page has even hydrated
+      if (claim?.getAnimations().every((a) => a.playState === "finished")) done();
+      else {
+        claim?.addEventListener("animationend", done, { once: true });
+        introTimer = setTimeout(done, 3500); // safety net (e.g. animations disabled)
+      }
     } else {
       markIntroDone();
     }
 
-    const cleanups: Array<() => void> = [];
-    const ctx = gsap.context(() => {
-      // Depth: mouse parallax + a tiny tilt (fine pointer), or a slow float (touch)
-      if (!reduced && matches(FINE_POINTER) && !matches(MOBILE)) {
-        const layers: DepthLayer[] = [
-          [plateLayer, -PARALLAX.plate],
-          [nameLayer, PARALLAX.name],
-          [frontLayer, PARALLAX.name],
-          [cutoutLayer, PARALLAX.cutout],
-        ];
-        cleanups.push(createParallax(layers, scene, () => window.scrollY < window.innerHeight));
-      } else if (!reduced) {
-        createFloat([
-          [plateLayer, FLOAT.amplitude * 0.4],
-          [nameLayer, FLOAT.amplitude * 0.7],
-          [cutoutLayer, FLOAT.amplitude],
-        ]);
-      }
+    // Parallax and the scroll exit aren't needed until the intro is over
+    const stopMotion = afterIntro(() => {
+      const cleanups: Array<() => void> = [];
+      const ctx = gsap.context(() => {
+        // Depth: mouse parallax + a tiny tilt (fine pointer), or a slow float (touch)
+        if (!reduced && matches(FINE_POINTER) && !matches(MOBILE)) {
+          const layers: DepthLayer[] = [
+            [plateLayer, -PARALLAX.plate],
+            [nameLayer, PARALLAX.name],
+            [frontLayer, PARALLAX.name],
+            [cutoutLayer, PARALLAX.cutout],
+          ];
+          cleanups.push(createParallax(layers, scene, () => window.scrollY < window.innerHeight));
+        } else if (!reduced) {
+          createFloat([
+            [plateLayer, FLOAT.amplitude * 0.4],
+            [nameLayer, FLOAT.amplitude * 0.7],
+            [cutoutLayer, FLOAT.amplitude],
+          ]);
+        }
 
-      // Scroll exit: the name splits off-frame, the camera pushes in, the scene darkens
-      // while the next section rises over the (sticky) hero. Reversible.
-      const tl = gsap.timeline({
-        defaults: { ease: "none", immediateRender: false },
-        scrollTrigger: { start: 0, end: () => window.innerHeight, scrub: true, invalidateOnRefresh: true },
+        // Scroll exit: the name splits off-frame, the camera pushes in, the scene darkens
+        // while the next section rises over the (sticky) hero. Reversible.
+        const tl = gsap.timeline({
+          defaults: { ease: "none", immediateRender: false },
+          scrollTrigger: { start: 0, end: () => window.innerHeight, scrub: true, invalidateOnRefresh: true },
+        });
+        tl.fromTo(q("[data-shade]"), { opacity: 0 }, { opacity: 0.7, duration: 1 }, 0).fromTo(
+          q("[data-claim], [data-hud]"),
+          { opacity: 1 },
+          { opacity: 0, duration: 0.35 },
+          0,
+        );
+        if (!reduced) {
+          tl.fromTo(q("[data-word='rid']"), { x: 0 }, { x: () => -0.6 * window.innerWidth, duration: 1 }, 0)
+            .fromTo(q("[data-word='ha']"), { x: 0 }, { x: () => 0.6 * window.innerWidth, duration: 1 }, 0)
+            .fromTo(plate, { scale: 1 }, { scale: 1.12, duration: 1 }, 0)
+            .fromTo(cutout, { scale: 1 }, { scale: 1.25, duration: 1 }, 0);
+        }
+      }, stage);
+
+      let alive = true;
+      document.fonts.ready.then(() => {
+        // Once the queue of deferred setup has run, on its own turn
+        if (alive) afterIntro(() => ScrollTrigger.refresh());
       });
-      tl.fromTo(q("[data-shade]"), { opacity: 0 }, { opacity: 0.7, duration: 1 }, 0).fromTo(
-        q("[data-claim], [data-hud]"),
-        { opacity: 1 },
-        { opacity: 0, duration: 0.35 },
-        0,
-      );
-      if (!reduced) {
-        tl.fromTo(q("[data-word='rid']"), { x: 0 }, { x: () => -0.6 * window.innerWidth, duration: 1 }, 0)
-          .fromTo(q("[data-word='ha']"), { x: 0 }, { x: () => 0.6 * window.innerWidth, duration: 1 }, 0)
-          .fromTo(plate, { scale: 1 }, { scale: 1.12, duration: 1 }, 0)
-          .fromTo(cutout, { scale: 1 }, { scale: 1.25, duration: 1 }, 0);
-      }
-    }, stage);
 
-    let alive = true;
-    document.fonts.ready.then(() => alive && ScrollTrigger.refresh());
+      return () => {
+        alive = false;
+        cleanups.forEach((fn) => fn());
+        ctx.revert();
+      };
+    });
 
     return () => {
-      alive = false;
       clearTimeout(introTimer);
-      cleanups.forEach((fn) => fn());
-      ctx.revert();
+      stopMotion();
     };
   }, []);
 

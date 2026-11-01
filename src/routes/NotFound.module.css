@@ -1,67 +1,66 @@
+/* The site's closing bookend, in miniature: a giant cropped number on the stage */
 .page {
-  min-height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: calc(var(--header-h) + 48px) 24px 112px;
-  text-align: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: clip;
+  background: var(--stage-bg);
+  color: var(--ink-white);
+  font-family: var(--font-sans);
 }
 
-.code {
-  font-family: var(--font-display);
-  font-size: clamp(96px, 16vw, 160px);
-  line-height: 1;
-  letter-spacing: 4px;
-  color: var(--color-accent);
+.page :focus-visible {
+  outline-color: var(--ink-white);
+}
+
+.copy {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(24px, 6vh, 64px) var(--grid-margin) 0;
 }
 
 .title {
-  margin-top: 8px;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(28px, 3vw, 36px);
-  letter-spacing: 2px;
-  color: var(--color-text);
+  font-size: clamp(2rem, 4.2vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
-.text {
-  max-width: 44ch;
-  margin-top: 10px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--color-text-muted);
+.link {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 32px;
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
-.primary,
-.secondary {
-  padding: 10px 20px;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: transform 0.3s var(--ease-spring), opacity 0.2s var(--ease-out);
+/* Three digits fill the width; the bottom edge crops them, like the footer's name */
+.code {
+  height: 0.56em;
+  overflow: clip;
+  padding-inline: var(--grid-margin);
+  font-size: calc((100vw - 2 * var(--grid-margin)) / 1.6);
+  font-weight: 700;
+  line-height: 0.74;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
 }
 
-.primary {
-  background: var(--color-accent);
-  color: #080b10;
-  font-weight: 500;
-}
-
-.secondary {
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
-}
-
-.primary:hover,
-.secondary:hover {
-  transform: translateY(-2px);
+.grain {
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  background-size: 128px;
+  opacity: 0.05;
+  pointer-events: none;
 }

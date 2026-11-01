@@ -35,7 +35,8 @@ export const SIZES = {
   mobile: `max(100vw, ${(100 * meta.mobile.aspect).toFixed(2)}vh)`,
 };
 
-export const MOBILE_MEDIA = "(max-width: 899px)";
+/** Phones and tablets upright get the tall crop; a phone on its side keeps the wide one */
+export const HERO_PORTRAIT = "(max-width: 899px) and (orientation: portrait)";
 
 export const heroMeta = meta;
 export const grainUrl = grain;
@@ -48,7 +49,7 @@ export const plateLinks = [
     type: "image/avif",
     imageSrcSet: srcSet("plate", "mobile", "avif"),
     imageSizes: SIZES.mobile,
-    media: MOBILE_MEDIA,
+    media: HERO_PORTRAIT,
     fetchPriority: "high",
   },
   {
@@ -57,7 +58,7 @@ export const plateLinks = [
     type: "image/avif",
     imageSrcSet: srcSet("plate", "desktop", "avif"),
     imageSizes: SIZES.desktop,
-    media: "(min-width: 900px)",
+    media: "(min-width: 900px), (orientation: landscape)",
     fetchPriority: "high",
   },
 ] as const;

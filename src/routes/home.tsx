@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import { pageMeta } from "@/lib/seo";
-import { AboutSection, ContactSection, HeroSection, SkillsSection, WorkSection } from "@/sections";
+import { AboutSection, ContactSection, HeroSection, WorkSection } from "@/sections";
 import { site } from "@/config/site";
 import { SELECTED_WORK } from "@/data/projects";
 import { useLenis } from "@/motion/lenis";
@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = () =>
     locale: "en_US",
   });
 
-// The hero plate is the LCP image; the first Work frame follows at low priority
+// The hero plate paints behind the LCP (the h1); the first Work frame follows at low priority
 export const links: Route.LinksFunction = () => [...plateLinks, firstFrameLink(SELECTED_WORK[0].id)];
 
 export default function Home() {
@@ -37,7 +37,6 @@ export default function Home() {
         </div>
       </div>
       <AboutSection />
-      <SkillsSection />
       <ContactSection />
       {site.showInternshipNotice && <InternshipNotice />}
       <Cursor />

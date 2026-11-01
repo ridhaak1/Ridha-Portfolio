@@ -9,7 +9,7 @@ export default function Hud() {
   return (
     <div className={styles.hud} data-hud>
       <p className={styles.role}>
-        {site.role} — {site.company}
+        {site.role} — {site.focus}
       </p>
 
       <p className={styles.scroll} aria-hidden="true">

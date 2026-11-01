@@ -67,7 +67,7 @@ export default function Contact() {
               className={styles.card}
             >
               <div className={styles.cardTop}>
-                <div className={styles.iconWrap}><Icon /></div>
+                <div className={styles.iconWrap}><Icon aria-hidden="true" /></div>
                 <HiArrowUpRight className={styles.arrow} />
               </div>
               <span className={styles.cardLabel}>{label}</span>
@@ -83,7 +83,7 @@ export default function Contact() {
           animate={inView ? "visible" : "hidden"}
         >
           <a href="mailto:info.ridha.dev@gmail.com" className={styles.cta}>
-            <SiGmail />
+            <SiGmail aria-hidden="true" />
             Send me an email
             <HiArrowUpRight className={styles.ctaArrow} />
           </a>

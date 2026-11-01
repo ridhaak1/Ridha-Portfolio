@@ -1,4 +1,4 @@
-export type SectionId = "about" | "projects" | "skills" | "contact";
+export type SectionId = "projects" | "about" | "contact";
 
 export interface SectionLink {
   id: SectionId;
@@ -6,9 +6,8 @@ export interface SectionLink {
 }
 
 export const SECTION_LINKS: SectionLink[] = [
+  { id: "projects", label: "Work" },
   { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
-  { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];
 

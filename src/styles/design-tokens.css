@@ -15,6 +15,7 @@
   --accent: #ff4d1c; /* max 2–3 touches per viewport */
 
   /* On photography / dark grounds */
+  --stage-bg: #0d0b09;
   --ink-white: #edebe6;
   --hairline-dark: rgba(237, 235, 230, 0.16);
 

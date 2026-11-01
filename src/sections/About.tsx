@@ -1,147 +1,142 @@
-import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform, type Variants } from "framer-motion";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
+import { CREDITS, FACTS, MARQUEE_PHRASE, STATEMENT } from "@/data/about";
+import { gsap, ScrollTrigger } from "@/motion/gsap";
+import { createVelocityMarquee } from "@/motion/marquee";
+import { REDUCED_MOTION } from "@/motion/media";
+import ScrollLitText from "@/motion/ScrollLitText";
+import { DUR, EASE, FADE } from "@/motion/tokens";
+import { grainUrl } from "./heroAssets";
 import styles from "./About.module.css";
-import { INFO_ROWS, STATEMENT, STORY, STRENGTHS, SUBTEXT } from "../data/about";
-import SectionTag from "../components/ui/SectionTag";
 
-const SPRING: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const fUp = (d = 0): Variants => ({
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SPRING, delay: d } },
-});
-const fIn = (d = 0): Variants => ({
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5, delay: d } },
-});
-const lineV: Variants = {
-  hidden:   { scaleX: 0 },
-  visible:  { scaleX: 1, transition: { duration: 0.9, ease: SPRING, delay: 0.08 } },
-};
+/** Phrases in the marquee track: enough to cover the viewport while one wraps around */
+const COPIES = 3;
 
 export default function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const tagRef     = useRef<HTMLDivElement>(null);
-  const topRef     = useRef<HTMLDivElement>(null);
-  const storyRef   = useRef<HTMLDivElement>(null);
-  const strRef     = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const numY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
+  const rootRef = useRef<HTMLElement>(null);
 
-  const tagInView   = useInView(tagRef,   { once: true, margin: "-60px" });
-  const topInView   = useInView(topRef,   { once: true, margin: "-60px" });
-  const storyInView = useInView(storyRef, { once: true, margin: "-60px" });
-  const strInView   = useInView(strRef,   { once: true, margin: "-60px" });
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const q = gsap.utils.selector(root);
+    const [facts] = q("[data-facts]");
+    const rules = q("[data-rule]");
+    const labels = q("[data-fact-label]");
+    const values = q("[data-fact-value]");
+    const rows: HTMLElement[] = q("[data-row]");
+    const [marquee] = q("[data-marquee]");
+    const [track] = q("[data-track]");
+
+    const mm = gsap.matchMedia();
+
+    mm.add(`not all and ${REDUCED_MOTION}`, () => {
+      // Facts: hairlines draw left → right, then values rise through their masks
+      gsap
+        .timeline({
+          defaults: { ease: EASE },
+          scrollTrigger: { trigger: facts, start: "top 85%", once: true },
+        })
+        .fromTo(rules, { scaleX: 0 }, { scaleX: 1, duration: DUR.slow, stagger: 0.1 }, 0)
+        .fromTo(labels, { opacity: 0 }, { opacity: 1, duration: DUR.fast, stagger: 0.1 }, 0.25)
+        .fromTo(values, { yPercent: 110 }, { yPercent: 0, duration: DUR.base, stagger: 0.1 }, 0.35);
+
+      // Credits: each row rises through its own mask, a row's height of travel
+      rows.forEach((row) => gsap.set(row.children, { y: row.offsetHeight }));
+      ScrollTrigger.batch(rows, {
+        start: "top 92%",
+        once: true,
+        onEnter: (batch) =>
+          batch.forEach((row, i) =>
+            gsap.to(row.children, {
+              y: 0,
+              duration: DUR.base,
+              ease: EASE,
+              stagger: 0.06,
+              delay: i * 0.1,
+              // Mask off, so focus outlines aren't clipped
+              onComplete: () => row.setAttribute("data-revealed", ""),
+            }),
+          ),
+      });
+
+      const stopMarquee = createVelocityMarquee(marquee, track, COPIES);
+      return () => {
+        stopMarquee();
+        rows.forEach((row) => row.removeAttribute("data-revealed"));
+      };
+    });
+
+    mm.add(REDUCED_MOTION, () => {
+      // Everything is in place already; blocks just fade in
+      [facts, ...rows].forEach((el) =>
+        gsap.fromTo(
+          el,
+          { opacity: 0 },
+          { opacity: 1, duration: FADE.duration, scrollTrigger: { trigger: el, start: "top 90%", once: true } },
+        ),
+      );
+    });
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <section ref={sectionRef} className={styles.about} id="about">
-      <div className={styles.gridBg} aria-hidden="true" />
-      <div className={`${styles.corner} ${styles.tl}`} aria-hidden="true" />
-      <div className={`${styles.corner} ${styles.br}`} aria-hidden="true" />
-      <motion.div className={styles.bigNum} style={{ y: numY }} aria-hidden="true">02</motion.div>
+    <section ref={rootRef} id="about" className={styles.about} aria-labelledby="about-title">
+      <h2 id="about-title" className={styles.srOnly}>
+        About
+      </h2>
 
-      <div className={styles.inner}>
+      <p className={styles.srOnly}>{STATEMENT.map((part) => part.text).join("")}</p>
+      <ScrollLitText className={styles.statement} aria-hidden="true">
+        {STATEMENT.map(({ text, em }) => (em ? <em key={text}>{text}</em> : text))}
+      </ScrollLitText>
 
-        {/* ── Tag ── */}
-        <div ref={tagRef}>
-          <SectionTag number="02" label="About" inView={tagInView} styles={styles} />
-        </div>
-
-        {/* ══ TOP: statement + info card ══ */}
-        <div ref={topRef} className={styles.topGrid}>
-
-          {/* Statement col */}
-          <div className={styles.statementCol}>
-            <motion.h2 className={styles.statement} variants={fUp(0)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
-              {STATEMENT.lead}{" "}
-              <span className={styles.accent}>{STATEMENT.accent}</span>
-            </motion.h2>
-
-            <motion.div
-              className={styles.rule}
-              variants={lineV}
-              initial="hidden"
-              animate={topInView ? "visible" : "hidden"}
-              style={{ originX: 0 }}
-            />
-
-            <motion.p className={styles.subText} variants={fUp(0.12)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
-              {SUBTEXT}
-            </motion.p>
+      <dl className={styles.facts} data-facts>
+        {FACTS.map(({ label, value }) => (
+          <div key={label} className={styles.fact}>
+            <span className={styles.rule} data-rule aria-hidden="true" />
+            <dt className={styles.factLabel} data-fact-label>
+              {label}
+            </dt>
+            <dd className={styles.factMask}>
+              <span className={styles.factValue} data-fact-value>
+                {value}
+              </span>
+            </dd>
           </div>
+        ))}
+      </dl>
 
-          {/* Info card */}
-          <motion.div className={styles.infoCard} variants={fUp(0.15)} initial="hidden" animate={topInView ? "visible" : "hidden"}>
-            {INFO_ROWS.map((row) => {
-              const Icon = row.icon;
-              return (
-                <div key={row.label} className={styles.infoRow}>
-                  <div className={styles.infoIconBox}>
-                    {row.dot
-                      ? <span className={styles.infoDot} aria-hidden="true" />
-                      : Icon && <Icon size={15} />
-                    }
-                  </div>
-                  <div className={styles.infoText}>
-                    <span className={styles.infoLabel}>{row.label}</span>
-                    <span className={styles.infoValue}>{row.value}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </motion.div>
+      <dl className={styles.credits}>
+        {CREDITS.map(({ category, techs }) => (
+          <div key={category} className={styles.row} data-row>
+            <dt className={styles.category}>{category}</dt>
+            <dd className={styles.techs}>
+              <ul className={styles.techList}>
+                {techs.map(({ name, icon, glyph }, i) => (
+                  <li key={name} className={styles.techItem}>
+                    <span className={styles.tech} tabIndex={0} data-cursor-icon={icon} data-cursor-glyph={glyph}>
+                      {name}
+                    </span>
+                    {i < techs.length - 1 && <span aria-hidden="true"> / </span>}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className={styles.marquee} data-marquee aria-hidden="true">
+        <div className={styles.track} data-track>
+          {Array.from({ length: COPIES }, (_, i) => (
+            <span key={i} className={styles.phrase}>
+              {MARQUEE_PHRASE}
+            </span>
+          ))}
         </div>
-
-        {/* ── Divider ── */}
-        <motion.div className={styles.divider} variants={lineV} initial="hidden" animate={topInView ? "visible" : "hidden"} style={{ originX: 0 }} />
-
-        {/* ══ STORY: Background + Approach ══ */}
-        <div ref={storyRef} className={styles.storyGrid}>
-
-          {STORY.map((block, i) => {
-            const Icon = block.icon;
-            return (
-              <motion.div key={block.eyebrow} className={styles.storyBlock} variants={fUp(i * 0.1)} initial="hidden" animate={storyInView ? "visible" : "hidden"}>
-                <div className={styles.storyIconCircle}><Icon size={18} /></div>
-                <span className={styles.eyebrow}>{block.eyebrow}</span>
-                <h3 className={styles.storyTitle}>{block.title}</h3>
-                <p className={styles.storyText}>{block.text}</p>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* ── Divider ── */}
-        <motion.div className={styles.divider} variants={lineV} initial="hidden" animate={storyInView ? "visible" : "hidden"} style={{ originX: 0 }} />
-
-        {/* ══ STRENGTHS ══ */}
-        <div ref={strRef} className={styles.strSection}>
-          <motion.span className={styles.strEyebrow} variants={fIn(0)} initial="hidden" animate={strInView ? "visible" : "hidden"}>
-            Strengths
-          </motion.span>
-          <motion.div className={styles.strTable} variants={fIn(0.05)} initial="hidden" animate={strInView ? "visible" : "hidden"}>
-            {STRENGTHS.map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <motion.div
-                  key={s.n}
-                  className={styles.strRow}
-                  variants={fUp(i * 0.07)}
-                  initial="hidden"
-                  animate={strInView ? "visible" : "hidden"}
-                >
-                  <span className={styles.strN}>{s.n}</span>
-                  <div className={styles.strIconBox}><Icon size={15} /></div>
-                  <span className={styles.strLabel}>{s.label}</span>
-                  <span className={styles.strLine} aria-hidden="true" />
-                  <span className={styles.strDetail}>{s.detail}</span>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-
       </div>
+
+      <div className={styles.grain} style={{ "--grain": `url(${grainUrl})` } as CSSProperties} aria-hidden="true" />
     </section>
   );
 }

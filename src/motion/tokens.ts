@@ -30,3 +30,16 @@ export const FADE = { duration: 0.4 } as const;
 
 /** Internship notice appears this long after the intro finishes */
 export const NOTICE_DELAY = 2;
+
+/** Scroll-lit text: words go from `dim` to full opacity across the scrub range */
+export const SCROLL_LIT = { dim: 0.18, start: "top 85%", end: "bottom 35%", stagger: 0.4 } as const;
+
+/** Velocity marquee. Speeds are % of the track per second; velocity is Lenis' px per frame. */
+export const MARQUEE = {
+  baseSpeed: 0.7,
+  boostPerVelocity: 0.25,
+  maxBoost: 12,
+  skewPerVelocity: 0.3,
+  maxSkew: 8,
+  skewEase: 0.5,
+} as const;

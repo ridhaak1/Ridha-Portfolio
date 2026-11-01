@@ -10,6 +10,10 @@
   mix-blend-mode: difference;
 }
 
+.cursor[data-marked] {
+  mix-blend-mode: normal;
+}
+
 /* One 64px circle: scaled to 8px it is the dot, at full size the ring */
 .ring {
   position: absolute;
@@ -35,4 +39,22 @@
   color: #fff;
   white-space: nowrap;
   opacity: 0;
+}
+
+/* Inside the ring: a logo or short mono text (data-cursor-icon / data-cursor-glyph) */
+.mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-meta);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--ink-white);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.mark svg {
+  max-width: none; /* The global max-width: 100% collapses it inside this zero-width layer */
 }

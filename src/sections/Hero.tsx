@@ -5,6 +5,7 @@ import { HERO_MODE_SCRIPT } from "@/motion/capabilities";
 import { gsap, ScrollTrigger } from "@/motion/gsap";
 import { markIntroDone } from "@/motion/intro";
 import { FINE_POINTER, matches, MOBILE, REDUCED_MOTION } from "@/motion/media";
+import { createFloat, createParallax, type DepthLayer } from "@/motion/parallax";
 import { FLOAT, PARALLAX } from "@/motion/tokens";
 import { fallbackSrc, grainUrl, heroMeta, MOBILE_MEDIA, SIZES, srcSet } from "./heroAssets";
 import styles from "./Hero.module.css";
@@ -72,41 +73,19 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       // Depth: mouse parallax + a tiny tilt (fine pointer), or a slow float (touch)
       if (!reduced && matches(FINE_POINTER) && !matches(MOBILE)) {
-        const d = PARALLAX.duration;
-        const ease = "power3.out";
-        const to = (el: Element, prop: string) => gsap.quickTo(el, prop, { duration: d, ease });
-        const moves = [
+        const layers: DepthLayer[] = [
           [plateLayer, -PARALLAX.plate],
           [nameLayer, PARALLAX.name],
           [frontLayer, PARALLAX.name],
           [cutoutLayer, PARALLAX.cutout],
-        ].map(([el, amount]) => ({ x: to(el as Element, "x"), y: to(el as Element, "y"), amount: amount as number }));
-        const tiltX = to(scene, "rotationX");
-        const tiltY = to(scene, "rotationY");
-
-        const onMove = (e: PointerEvent) => {
-          if (window.scrollY > window.innerHeight) return; // hero offscreen
-          const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-          const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-          moves.forEach((m) => {
-            m.x(nx * m.amount);
-            m.y(ny * m.amount * 0.6);
-          });
-          tiltY(nx * PARALLAX.tilt);
-          tiltX(-ny * PARALLAX.tilt);
-        };
-        window.addEventListener("pointermove", onMove, { passive: true });
-        cleanups.push(() => window.removeEventListener("pointermove", onMove));
+        ];
+        cleanups.push(createParallax(layers, scene, () => window.scrollY < window.innerHeight));
       } else if (!reduced) {
-        const float = (el: Element, amount: number, phase: number) =>
-          gsap.fromTo(
-            el,
-            { y: -amount },
-            { y: amount, duration: FLOAT.period / 2, ease: "sine.inOut", repeat: -1, yoyo: true, delay: phase },
-          );
-        float(plateLayer, FLOAT.amplitude * 0.4, 0);
-        float(nameLayer, FLOAT.amplitude * 0.7, 0.6);
-        float(cutoutLayer, FLOAT.amplitude, 1.2);
+        createFloat([
+          [plateLayer, FLOAT.amplitude * 0.4],
+          [nameLayer, FLOAT.amplitude * 0.7],
+          [cutoutLayer, FLOAT.amplitude],
+        ]);
       }
 
       // Scroll exit: the name splits off-frame, the camera pushes in, the scene darkens

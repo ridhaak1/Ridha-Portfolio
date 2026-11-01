@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import styles from "../../sections/Projects.module.css";
+import styles from "./SideDrawer.module.css";
 
 const EASE_OUT: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 

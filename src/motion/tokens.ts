@@ -8,8 +8,7 @@ export const DUR = { fast: 0.6, base: 0.9, slow: 1.2 } as const;
 
 /*
  * The hero intro is pure CSS (it runs from first paint, before hydration):
- * its timings live as --intro-* custom properties at the top of
- * sections/Hero.module.css.
+ * its timings live as --intro-* custom properties in styles/design-tokens.css.
  */
 
 /** Mouse parallax, px at the viewport edge (cutout moves opposite to the plate) */

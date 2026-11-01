@@ -10,36 +10,13 @@
   --header-h: 0px;
 }
 
+/* Intro timings: --intro-* in styles/design-tokens.css (shared with the global HUD) */
 .hero {
-  /* Intro timeline (CSS, plays from first paint). ≈2s desktop */
-  --intro-plate: 1.3s;
-  --intro-letters-at: 0.6s;
-  --intro-letter-step: 0.07s;
-  --intro-letters: 1.1s;
-  --intro-cutout-at: 1.05s;
-  --intro-cutout: 1s;
-  --intro-chrome-at: 1.55s;
-  --intro-chrome: 0.6s;
-
   /* Sticky: the next section rises over it (see routes/home.tsx) */
   position: sticky;
   top: 0;
   height: 100vh;
   height: 100svh;
-}
-
-/* ≈1.2s on phones */
-@media (max-width: 899px) {
-  .hero {
-    --intro-plate: 0.8s;
-    --intro-letters-at: 0.3s;
-    --intro-letter-step: 0.05s;
-    --intro-letters: 0.7s;
-    --intro-cutout-at: 0.55s;
-    --intro-cutout: 0.65s;
-    --intro-chrome-at: 0.8s;
-    --intro-chrome: 0.4s;
-  }
 }
 
 .stage {

@@ -6,6 +6,27 @@ import ajib from "../assets/images/ajibhome.png";
 export type VisualType = "image" | "console";
 export type ProjectStatus = "completed" | "in-progress";
 
+/** How a project appears as a scene in "Selected work" on the home page */
+export interface ProjectScene {
+  /** Display title (sentence case) */
+  title: string;
+  /** e.g. "AI education platform" */
+  kind: string;
+  /** TODO(ridha): fill in the real years */
+  year: string;
+  status: string;
+  /** TODO(ridha): fill in the real stacks */
+  stack: string[];
+  /** One short sentence, ≤ ~12 words */
+  line: string;
+  /**
+   * How far the title sits up on the frame's top edge (translate-y, % of the title box;
+   * default 84). Raise it when a descender carries a letter's identity (the y in "MyShop"
+   * reads as a v, the j in "Ajib" as an i, with their tails behind the frame).
+   */
+  lift?: number;
+}
+
 export interface Project {
   id: string;
   index: string;
@@ -22,6 +43,7 @@ export interface Project {
   visual: VisualType;
   accent: string;
   status?: ProjectStatus;
+  scene?: ProjectScene;
 }
 
 export const PROJECTS: Project[] = [
@@ -47,6 +69,15 @@ export const PROJECTS: Project[] = [
     visual: "image",
     accent: "rgba(245,166,35,0.9)",
     status: "in-progress",
+    scene: {
+      title: "Ajib",
+      kind: "AI education platform",
+      year: "[YEAR]",
+      status: "In progress",
+      stack: ["AI", "EdTech", "NLP"],
+      line: "Any study material becomes your next exam.",
+      lift: 100,
+    },
   },
   {
     id: "admin-panel",
@@ -69,6 +100,15 @@ export const PROJECTS: Project[] = [
     image: adminImg,
     visual: "image",
     accent: "rgba(245,166,35,0.9)",
+    scene: {
+      title: "MyShop",
+      kind: "Product admin panel",
+      year: "[YEAR]",
+      status: "Live",
+      stack: ["React", "TypeScript", "Node.js"],
+      line: "A lightweight dashboard with full control over products.",
+      lift: 100,
+    },
   },
   {
     id: "reviewnest",
@@ -91,6 +131,14 @@ export const PROJECTS: Project[] = [
     image: reviewnest,
     visual: "image",
     accent: "rgba(130,210,255,0.9)",
+    scene: {
+      title: "ReviewNest",
+      kind: "Review management SaaS",
+      year: "[YEAR]",
+      status: "Completed",
+      stack: ["React", "C#", ".NET", "SQL"],
+      line: "Every customer review, one dashboard.",
+    },
   },
   {
     id: "r-library",
@@ -136,3 +184,8 @@ export const PROJECTS: Project[] = [
     accent: "rgba(224,86,67,0.9)",
   },
 ];
+
+/** The projects shown as scenes in "Selected work", in order */
+export const SELECTED_WORK = PROJECTS.filter(
+  (p): p is Project & { scene: ProjectScene } => !!p.scene,
+);

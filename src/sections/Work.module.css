@@ -1,0 +1,346 @@
+/* ═══════════════════════════════════════════════════════════
+   Selected work — each project is a scene:
+   mood plate → giant title → sharp frame (overlapping the title) → meta
+   Default layout: scenes stacked (mobile, reduced motion, no JS).
+   [data-pinned] (set by Work.tsx on desktop): one sticky stage, scrubbed cuts.
+   ═══════════════════════════════════════════════════════════ */
+
+.track {
+  --stage-bg: #0d0b09;
+  --frame-w: 92vw;
+  --title-size: 16vw;
+
+  position: relative;
+  background: var(--stage-bg);
+  color: var(--ink-white);
+  font-family: var(--font-sans);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto repeat(3, minmax(100vh, auto));
+  grid-template-rows: auto repeat(3, minmax(100svh, auto));
+  overflow: hidden;
+}
+
+/* Layers only matter in the pinned layout; stacked, their children join the grid */
+.scene,
+.layer {
+  display: contents;
+}
+
+.label {
+  grid-row: 1;
+  padding: 104px var(--grid-margin) 0;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  color: rgba(237, 235, 230, 0.8);
+}
+
+.count {
+  color: rgba(237, 235, 230, 0.5);
+}
+
+/* Scene n lives in grid row n + 1 (row 1 is the label) */
+.plate:nth-child(1),
+.title:nth-child(1),
+.item:nth-child(1) {
+  grid-row: 2;
+}
+
+.plate:nth-child(2),
+.title:nth-child(2),
+.item:nth-child(2) {
+  grid-row: 3;
+}
+
+.plate:nth-child(3),
+.title:nth-child(3),
+.item:nth-child(3) {
+  grid-row: 4;
+}
+
+.plate,
+.title,
+.item {
+  grid-column: 1;
+}
+
+/* ── Plate: blurred mood background (pre-blurred, tiny) ── */
+.plate {
+  position: relative;
+  z-index: 0;
+  align-self: stretch;
+  overflow: hidden;
+}
+
+.plate img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Title ──
+   Stacked: title and frame are both centred in the scene's row, then the title is
+   lifted to sit on the frame's top edge (frame is 16:10 at --frame-w). */
+.title {
+  /* Never wider than the screen: long titles (≈0.56em per char) shrink to fit */
+  --size: min(var(--title-size), 92vw / (var(--chars) * 0.56));
+
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  justify-self: center;
+  translate: 0 calc(var(--frame-w) / -3.2 - var(--size) * (0.35 + var(--raise, 0)) - 5px);
+  font-size: var(--size);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
+/* SplitText line masks: padded so descenders aren't clipped */
+.title > * {
+  padding-block: 0.06em 0.16em;
+  margin-block: -0.06em -0.16em;
+}
+
+/* ── Frame + meta ── */
+.item {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  justify-self: center;
+  width: var(--frame-w);
+  translate: 0 40px; /* the meta below makes the block taller than the frame */
+}
+
+.frame {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.6),
+    0 10px 20px -10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transform-origin: 50% 100%;
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+}
+
+.frame:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.meta {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.metaRow {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  color: rgba(237, 235, 230, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stack {
+  color: rgba(237, 235, 230, 0.55);
+}
+
+.line {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(237, 235, 230, 0.62);
+}
+
+/* Work counter + progress: pinned layout only */
+.hud {
+  display: none;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background-image: var(--grain);
+  background-size: 128px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Stacked on desktop (reduced motion): same frame size as the pinned layout */
+@media (min-width: 900px) {
+  .track {
+    --frame-w: min(52vw, (100vh - 330px) * 1.6);
+    --frame-w: min(52vw, (100svh - 330px) * 1.6);
+  }
+}
+
+/* Phones: bigger titles, and the stack goes on its own line instead of truncating */
+@media (max-width: 899px) {
+  .track {
+    --title-size: 26vw;
+  }
+
+  .metaRow {
+    white-space: normal;
+  }
+
+  .stack {
+    display: block;
+  }
+
+  .stackSep {
+    display: none;
+  }
+}
+
+/* ═══════════ Pinned (desktop, motion allowed) ═══════════ */
+.track[data-pinned] {
+  --frame-w: min(52vw, (100vh - 330px) * 1.6);
+  --frame-w: min(52vw, (100svh - 330px) * 1.6);
+  --frame-h: calc(var(--frame-w) / 1.6);
+  /* Frame centred below the middle, leaving room above for the title */
+  --frame-top: calc(57% - var(--frame-h) / 2);
+
+  height: 400vh;
+  height: 400svh;
+}
+
+.track[data-pinned] .stage {
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 100vh;
+  height: 100svh;
+  perspective: 1200px;
+}
+
+.track[data-pinned] .scene,
+.track[data-pinned] .layer {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+.track[data-pinned] .layer {
+  will-change: transform;
+}
+
+.track[data-pinned] .label {
+  position: absolute;
+  top: 72px;
+  left: var(--grid-margin);
+  padding: 0;
+  z-index: 4;
+}
+
+.track[data-pinned] .plate {
+  position: absolute;
+  inset: -4%;
+}
+
+/* Sits on the frame's top edge: the frame covers the bottom of the letters (and the
+   descenders) while short titles ("Ajib", the "y" in "MyShop") stay readable */
+.track[data-pinned] .title {
+  position: absolute;
+  left: 50%;
+  top: var(--frame-top);
+  translate: -50% var(--lift, -84%);
+  margin: 0;
+}
+
+.track[data-pinned] .item {
+  position: absolute;
+  left: 50%;
+  top: var(--frame-top);
+  translate: -50% 0;
+  margin: 0;
+}
+
+/* All scenes occupy the same box: only the frame itself takes pointer input, and a
+   frame that's wiped out (clip-path) lets clicks through to the current scene's */
+.track[data-pinned] .item {
+  pointer-events: none;
+}
+
+.track[data-pinned] .frame {
+  pointer-events: auto;
+}
+
+/* Later scenes stack above earlier ones: their frame wipes in over the current one */
+.track[data-pinned] .item:nth-child(2) {
+  z-index: 3;
+}
+
+.track[data-pinned] .item:nth-child(3) {
+  z-index: 4;
+}
+
+.track[data-pinned] .meta {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.track[data-pinned] .hud {
+  display: block;
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.counter {
+  position: absolute;
+  left: var(--grid-margin);
+  bottom: 20px;
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+  color: rgba(237, 235, 230, 0.8);
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(237, 235, 230, 0.6);
+  transform: scaleX(0);
+  transform-origin: left center;
+}

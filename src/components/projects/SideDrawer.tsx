@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, type Variants } from "framer-motion";
 import type { Project } from "../../data/projects";
+import { getLenis } from "@/motion/lenis";
 import ConsoleFull from "./ConsoleFull";
-import styles from "../../sections/Projects.module.css";
+import styles from "./SideDrawer.module.css";
 
 const SPRING: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -37,10 +39,15 @@ export default function SideDrawer({ project, onClose }: SideDrawerProps) {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    getLenis()?.stop();
+    return () => {
+      document.body.style.overflow = "";
+      getLenis()?.start();
+    };
   }, []);
 
-  return (
+  // Portalled: it must sit above the fixed HUD and notice, outside the section's stacking context
+  return createPortal(
     <>
       <motion.div
         className={styles.backdrop}
@@ -60,6 +67,7 @@ export default function SideDrawer({ project, onClose }: SideDrawerProps) {
         transition={{ duration: 0.42, ease: SPRING }}
         aria-label={`${project.title} details`}
         role="complementary"
+        data-lenis-prevent
       >
         <div className={styles.drawerTopLine} aria-hidden="true" />
         <div className={styles.drawerGlow} aria-hidden="true" />
@@ -214,6 +222,7 @@ export default function SideDrawer({ project, onClose }: SideDrawerProps) {
           </motion.div>
         </div>
       </motion.aside>
-    </>
+    </>,
+    document.body,
   );
 }

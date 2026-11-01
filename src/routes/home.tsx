@@ -1,17 +1,14 @@
 import type { Route } from "./+types/home";
 import { pageMeta } from "@/lib/seo";
-import {
-  AboutSection,
-  ContactSection,
-  HeroSection,
-  ProjectsSection,
-  SkillsSection,
-} from "@/sections";
+import { AboutSection, ContactSection, HeroSection, SkillsSection, WorkSection } from "@/sections";
 import { site } from "@/config/site";
+import { SELECTED_WORK } from "@/data/projects";
 import { useLenis } from "@/motion/lenis";
 import InternshipNotice from "@/components/temporary/InternshipNotice";
 import Cursor from "@/components/cursor/Cursor";
+import TopHud from "@/components/hud/TopHud";
 import { plateLinks } from "@/sections/heroAssets";
+import { firstFrameLink } from "@/sections/workAssets";
 
 export const meta: Route.MetaFunction = () =>
   pageMeta({
@@ -23,22 +20,23 @@ export const meta: Route.MetaFunction = () =>
     locale: "en_US",
   });
 
-// The plate is the LCP image: preload it for the matching layout
-export const links: Route.LinksFunction = () => [...plateLinks];
+// The hero plate is the LCP image; the first Work frame follows at low priority
+export const links: Route.LinksFunction = () => [...plateLinks, firstFrameLink(SELECTED_WORK[0].id)];
 
 export default function Home() {
   useLenis();
 
   return (
     <>
-      {/* The hero is sticky inside this wrapper; About rises over it, then both scroll away */}
+      <TopHud />
+      {/* The hero is sticky inside this wrapper; Work rises over it, then both scroll away */}
       <div>
         <HeroSection />
         <div style={{ position: "relative", zIndex: 1 }}>
-          <AboutSection />
+          <WorkSection />
         </div>
       </div>
-      <ProjectsSection />
+      <AboutSection />
       <SkillsSection />
       <ContactSection />
       {site.showInternshipNotice && <InternshipNotice />}

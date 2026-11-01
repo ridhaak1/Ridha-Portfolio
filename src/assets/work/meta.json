@@ -1,0 +1,23 @@
+{
+  "ajib": {
+    "widths": [
+      800,
+      1600
+    ],
+    "aspect": 1.6
+  },
+  "admin-panel": {
+    "widths": [
+      800,
+      1600
+    ],
+    "aspect": 1.6
+  },
+  "reviewnest": {
+    "widths": [
+      800,
+      1600
+    ],
+    "aspect": 1.6
+  }
+}

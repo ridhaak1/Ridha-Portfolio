@@ -41,7 +41,7 @@ export const SELECTED_WORK: SelectedProject[] = [
     scene: {
       title: "Ajib",
       kind: "AI education platform",
-      year: "[YEAR]",
+      year: "2026",
       status: "In progress",
       stack: ["AI", "EdTech", "NLP"],
       line: "Any study material becomes your next exam.",
@@ -57,7 +57,7 @@ export const SELECTED_WORK: SelectedProject[] = [
     scene: {
       title: "MyShop",
       kind: "Product admin panel",
-      year: "[YEAR]",
+      year: "2024",
       status: "Live",
       stack: ["React", "TypeScript", "Node.js"],
       line: "A lightweight dashboard with full control over products.",
@@ -73,7 +73,7 @@ export const SELECTED_WORK: SelectedProject[] = [
     scene: {
       title: "ReviewNest",
       kind: "Review management SaaS",
-      year: "[YEAR]",
+      year: "2025",
       status: "Completed",
       stack: ["React", "C#", ".NET", "SQL"],
       line: "Every customer review, one dashboard.",
